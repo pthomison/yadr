@@ -5,7 +5,7 @@ https://docs.docker.com/registry/spec/api/
 https://ops4j.github.io/ramler/0.6.0/registry/
 
 - unauthorized
-- 
+- implements pull
 
 API:
 
