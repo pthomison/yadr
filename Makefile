@@ -17,3 +17,12 @@ loadtestlayers:
 cleartest:
 	docker rm -f registry
 	rm -rf ./tmp-data || true
+
+clearregistrydata:
+	sudo rm -rf ./registry-data
+
+runtestregistry:
+	docker pull fedora:32 
+	docker tag fedora:32 127.0.0.1:5000/fedora:latest
+	docker run -it --rm -d --name registry -p 5000:5000 registry:2 
+	docker push 127.0.0.1:5000/fedora:latest

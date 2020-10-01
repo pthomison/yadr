@@ -5,21 +5,21 @@ import (
 	"net/http"
 )
 
-type registry struct {
+type Registry struct {
 	StorageLocation string
 
 }
 
-func (r *registry) Serve() {
-    r := mux.NewRouter()
-    r.HandleFunc(BaseAPI, BaseHandler)
+func (r *Registry) Serve() {
+    router := mux.NewRouter()
+    router.HandleFunc(BaseAPI, BaseHandler)
 
 
-    r.Methods("GET").HandleFunc(BaseAPI + ManifestAPI, ManifestGetHandler)
+    router.HandleFunc(BaseAPI + ManifestAPI, ManifestGetHandler).Methods("GET")
 
 
-    r.Methods("GET").HandleFunc(BaseAPI + BlobAPI, BlobGetHandler)
+    router.HandleFunc(BaseAPI + BlobAPI, BlobGetHandler).Methods("GET")
 
-    http.Handle("/", r)
+    http.Handle("/", router)
     http.ListenAndServe(":5000", nil)
 }

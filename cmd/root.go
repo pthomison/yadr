@@ -28,5 +28,10 @@ func init() {
 
 func run(cmd *cobra.Command, args []string) {
 	fmt.Println("hi")
-	registry.Serve()
+
+	r := &registry.Registry{
+		StorageLocation: "./pjt-testing",
+	}
+
+	r.Serve()
 }
