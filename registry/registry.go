@@ -1,23 +1,25 @@
 package registry
 
 import (
-	"fmt"
-	// "os"
 	"github.com/gorilla/mux"
 	"net/http"
 )
 
-func Serve() {
-    r := mux.NewRouter()
-    r.HandleFunc("/", HomeHandler)
-    // r.HandleFunc("/products", ProductsHandler)
-    // r.HandleFunc("/articles", ArticlesHandler)
-    http.Handle("/", r)
-    http.ListenAndServe(":5000", nil)
+type registry struct {
+	StorageLocation string
+
 }
 
-func HomeHandler(w http.ResponseWriter, r *http.Request) {
-    // vars := mux.Vars(r)
-    w.WriteHeader(http.StatusOK)
-    fmt.Fprintf(w, "Category: %v\n", "tod")
+func (r *registry) Serve() {
+    r := mux.NewRouter()
+    r.HandleFunc(BaseAPI, BaseHandler)
+
+
+    r.Methods("GET").HandleFunc(BaseAPI + ManifestAPI, ManifestGetHandler)
+
+
+    r.Methods("GET").HandleFunc(BaseAPI + BlobAPI, BlobGetHandler)
+
+    http.Handle("/", r)
+    http.ListenAndServe(":5000", nil)
 }

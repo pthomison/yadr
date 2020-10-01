@@ -1,7 +1,19 @@
 
 run:
-	sudo docker run -it --rm -v "$(PWD):/hacking" -w "/hacking" -p "5000:5000" golang:latest go run main.go
+	docker run -it --rm -v "$(PWD):/hacking" -w "/hacking" -p "5000:5000" golang:latest go run main.go
+
+test:
+	docker run -it --rm -v "$(PWD):/hacking" -w "/hacking" golang:latest go test -v ./...
 
 
 bash:
-	sudo docker run -it --rm -v "$(PWD):/hacking" -w "/hacking" golang:latest /bin/bash
+	docker run -it --rm -v "$(PWD):/hacking" -w "/hacking" golang:latest /bin/bash
+
+loadtestlayers:
+	docker run -it --rm -d --name registry -p 5000:5000 registry:2 
+	docker push 127.0.0.1:5000/fedora:latest
+	docker cp registry:/var/lib/registry/docker/registry/v2/ ./tmp-data
+
+cleartest:
+	docker rm -f registry
+	rm -rf ./tmp-data || true
