@@ -14,24 +14,21 @@ import(
 
 )
 
-type digest struct {
-	hashType string
-	verified bool
-	Digest string `json:"digest"`
-}
+// type digest struct {
+// 	hashType string
+// 	verified bool
+// 	Digest string `json:"digest"`
+// }
 
-type blob struct {
+// type blob struct {
 
-}
+// }
 
 func (r *Registry) BlobUploadRequestPostHandlerFactory() func(w http.ResponseWriter, req *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
 		fmt.Println("Blob Upload Request Post Handler")
 
 		id := uuid.New().String()
-
-		fmt.Printf("%+v\n", id)
-
 
 		vars := mux.Vars(req)
 	 
@@ -43,8 +40,6 @@ func (r *Registry) BlobUploadRequestPostHandlerFactory() func(w http.ResponseWri
 	    w.Header().Set("Location", fmt.Sprintf("/v2/%s/blobs/uploads/%s", vars["image"], id))
 	    w.Header().Set("Docker-Upload-UUID", id)
 	    w.WriteHeader(http.StatusAccepted)
-
-	    fmt.Printf("%+v\n", w.Header())
 	}
 }
 
@@ -58,7 +53,6 @@ func (r *Registry) BlobUploadPatchFactory() func(w http.ResponseWriter, req *htt
 
 		vars := mux.Vars(req)
 
-
 		f, err := os.Create(uploadFile)
 		check(err)
 
@@ -67,9 +61,6 @@ func (r *Registry) BlobUploadPatchFactory() func(w http.ResponseWriter, req *htt
 		check(err)
 
 		rng := fmt.Sprintf("0-%v", c)
-
-		fmt.Printf("%+v\n", rng)
-
 	
 	    w.Header().Set("Location", fmt.Sprintf("/v2/%s/blobs/uploads/%s", vars["image"], id))
 	    w.Header().Set("Range", rng)
@@ -93,34 +84,16 @@ func (r *Registry) BlobUploadCompletePostFactory() func(w http.ResponseWriter, r
 		hash, err := hashFile(uploadFile)
 		check(err)
 
-		fmt.Println(hash)
+		if hash == vars["digest"] {
+			check(r.moveBlobUpload(id, hash))
+			w.WriteHeader(http.StatusCreated)
+		} else {
+			w.WriteHeader(http.StatusBadRequest)
+		}
 
-		hashCheck := (hash == vars["digest"])
-
-		fmt.Println(hashCheck)
-
-
-		check(r.moveBlobUpload(id, hash))	
-
-		w.WriteHeader(http.StatusCreated)
 	}
 }
 
-
-
-
-func BlobGetHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Blob Get Handler Called")
-
-    w.WriteHeader(http.StatusOK)
-}
-
-func BlobPostHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Blob Post Handler Called")
-
-
-    w.WriteHeader(http.StatusOK)
-}
 
 
 func (r *Registry) BlobHeadHandlerFactory() func(w http.ResponseWriter, req *http.Request) {
@@ -130,34 +103,12 @@ func (r *Registry) BlobHeadHandlerFactory() func(w http.ResponseWriter, req *htt
 		vars := mux.Vars(req)
 		fmt.Printf("%+v\n", vars)
 
-		r.checkForBlob(vars["digest"])
+		fmt.Printf("\nCheck for blobs:%+v\n", r.checkForBlob(vars["digest"]))
 
-
-	    w.WriteHeader(http.StatusNotFound)
-	}
-}
-
-func (r *Registry) BlobPostHandlerFactory() func(w http.ResponseWriter, req *http.Request) {
-	return func(w http.ResponseWriter, req *http.Request) {
-		fmt.Println("Blob Post Handler Called")
-
-		vars := mux.Vars(req)
-		fmt.Printf("%+v\n", vars)
-
-
-
-		// r.checkForBlob(vars["digest"])
-
-
-	    w.WriteHeader(http.StatusNotFound)
-	}
-}
-
-
-
-func check(e error) {
-	if e != nil {
-		fmt.Printf("%+v\n", e)
-		panic(e)
+		if r.checkForBlob(vars["digest"]) {
+			w.WriteHeader(http.StatusOK)
+		} else {
+	    	w.WriteHeader(http.StatusNotFound)
+		}
 	}
 }

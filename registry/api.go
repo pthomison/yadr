@@ -9,6 +9,6 @@ const(
 
 	BlobAPI = BaseAPI + "{image}/blobs/{digest}"
 
-	// ManifestAPI = BaseAPI + "{image}/manifests/{reference}"
+	ManifestAPI = BaseAPI + "{image}/manifests/{reference}"
 )
 

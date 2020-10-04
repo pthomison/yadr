@@ -7,12 +7,18 @@ import(
 
 	"crypto/sha256"
 
+	"bytes"
+	"io"
+
 )
 
 const(
 	blobFolder = "/blobs/"
 	manifestFolder = "/manifests/"
 	uploadFolder = "/uploads/"
+
+	storageFolderPerms = 0777
+	storageFilePerms = 0777
 )
 
 func hashFile(filename string) (string, error) {
@@ -46,4 +52,69 @@ func (r *Registry) moveBlobUpload(uuid string, descriptor string) error {
 	blobLocation := r.StorageLocation + blobFolder + descriptor
 
 	return os.Rename(uploadLocation, blobLocation)
+} 
+
+func (r *Registry) writeManifestDigest(image string, rd io.Reader) (string, error) {
+	err := r.createImageFolder(image)
+	if err != nil {
+		return "", err
+	}
+
+	var buf bytes.Buffer
+
+	_, err = io.Copy(&buf, rd)
+	if err != nil {
+		return "", err
+	}
+
+	hash := sha256.Sum256(buf.Bytes())
+	digest := fmt.Sprintf("sha256:%x", hash)
+
+	fmt.Printf("Buff: %+v\n", string(buf.Bytes()))
+	fmt.Printf("Hash: %+v\n", digest)
+
+    f, err := os.Create(r.StorageLocation + manifestFolder + image + "/index/" + digest )
+
+    if err != nil {
+        return "", err
+    }
+
+    defer f.Close()
+
+	_, err = io.Copy(f, &buf)
+
+	return digest, nil
+} 
+
+func (r *Registry) writeManifestTag(image string, tag string, rd io.Reader) error {
+	digest, err := r.writeManifestDigest(image, rd)
+	if err != nil {
+		return err
+	}
+
+    f, err := os.Create(r.StorageLocation + manifestFolder + image + "/tags/" + tag + "/link" )
+
+    if err != nil {
+        return err
+    }
+
+    defer f.Close()
+
+	_, err = f.WriteString(digest)
+
+	return nil
+} 
+
+func (r *Registry) createImageFolder(image string) error {
+	err := os.MkdirAll(r.StorageLocation + manifestFolder + image + "/tags", storageFolderPerms)
+	if err != nil {
+		return err
+	}
+
+	err = os.MkdirAll(r.StorageLocation + manifestFolder + image + "/index", storageFolderPerms)
+	if err != nil {
+		return err
+	}
+
+	return nil
 } 

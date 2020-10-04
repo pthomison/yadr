@@ -1,12 +1,15 @@
 package registry
 
-// import(
-// 	"crypto/sha256"
-// 	"net/http"
-// 	"fmt"
-// 	"encoding/json"
+import(
+	// "crypto/sha256"
+	"net/http"
+	"fmt"
+	// "encoding/json"
+	// "os"
+	"io"
+	"github.com/gorilla/mux"
 
-// )
+)
 
 
 // type manifest struct {
@@ -26,6 +29,35 @@ package registry
 // 	MediaType string `json:"mediaType"`
 // 	digest
 // }
+
+
+func (r *Registry) ManifestPutHandlerFactory() func(w http.ResponseWriter, req *http.Request) {
+	return func(w http.ResponseWriter, req *http.Request) {
+		fmt.Println("\n\n\n\n\n\n--------Manifest Put Handler")
+
+		// id := uuid.New().String()
+
+
+		// c, err := io.Copy(os.Stdout, req.Body)
+		// check(err)
+
+		vars := mux.Vars(req)
+
+		// fmt.Printf("C: %+v\n", c)
+		fmt.Printf("Vars: %+v\n", vars)
+	
+		r.writeManifestTag(vars["image"], vars["reference"], io.Reader(req.Body))
+
+	    w.Header().Set("Accept-Encoding", "gzip")
+	    w.Header().Set("Content-Length", "0")
+	    w.Header().Set("Range", "0-0")
+
+	    // w.Header().Set("Location", fmt.Sprintf("/v2/%s/blobs/uploads/%s", vars["image"], id))
+	    // w.Header().Set("Docker-Upload-UUID", id)
+	    w.WriteHeader(http.StatusAccepted)
+	}
+}
+
 
 
 

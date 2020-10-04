@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"os"
+	"fmt"
 )
 
 type Registry struct {
@@ -33,20 +34,22 @@ func (r *Registry) Serve() {
 
 func (r *Registry) SetAPI() {
     router := mux.NewRouter()
-    router.HandleFunc(BaseAPI, BaseGetHandler).Methods("GET")
+    router.HandleFunc(BaseAPI, BaseGetHandler).
+    	Methods("GET")
 
+    // MANIFEST HANDLERS
+    router.HandleFunc(ManifestAPI, r.ManifestPutHandlerFactory()).
+    	Methods("PUT")
 
-    // router.HandleFunc(ManifestAPI, ManifestGetHandler).Methods("GET")
-    // router.HandleFunc(ManifestAPI, ManifestPostHandler).Methods("POST")
-    // router.HandleFunc(ManifestAPI, ManifestHeadHandler).Methods("HEAD")
+    // BLOB HANDLERS
+    router.HandleFunc(BlobAPI, r.BlobHeadHandlerFactory()).
+    	Methods("HEAD")
 
-
-    // router.HandleFunc(BlobAPI, BlobGetHandler).Methods("GET")
-    // router.HandleFunc(BlobAPI, BlobPostHandler).Methods("POST")
-    router.HandleFunc(BlobAPI, r.BlobHeadHandlerFactory()).Methods("HEAD")
-
-    router.HandleFunc(BlobUploadRequestAPI, r.BlobUploadRequestPostHandlerFactory()).Methods("POST")
-    router.HandleFunc(BlobUploadAPI, r.BlobUploadPatchFactory()).Methods("PATCH")
+    router.HandleFunc(BlobUploadRequestAPI, r.BlobUploadRequestPostHandlerFactory()).
+    	Methods("POST")
+    
+    router.HandleFunc(BlobUploadAPI, r.BlobUploadPatchFactory()).
+    	Methods("PATCH")
 
     router.HandleFunc(BlobUploadAPI, r.BlobUploadCompletePostFactory()).
     	Methods("PUT").
@@ -59,25 +62,32 @@ func (r *Registry) SetAPI() {
 }
 
 func (r *Registry) InitializeStorage() error {
-	err := os.MkdirAll(r.StorageLocation, 0777)
+	err := os.MkdirAll(r.StorageLocation, storageFolderPerms)
 	if err != nil {
 		return err
 	}
 
-	err = os.MkdirAll(r.StorageLocation + blobFolder, 0777)
+	err = os.MkdirAll(r.StorageLocation + blobFolder, storageFolderPerms)
 	if err != nil {
 		return err
 	}
 
-	err = os.MkdirAll(r.StorageLocation + manifestFolder, 0777)
+	err = os.MkdirAll(r.StorageLocation + manifestFolder, storageFolderPerms)
 	if err != nil {
 		return err
 	}
 
-	err = os.MkdirAll(r.StorageLocation + uploadFolder, 0777)
+	err = os.MkdirAll(r.StorageLocation + uploadFolder, storageFolderPerms)
 	if err != nil {
 		return err
 	}
 
 	return nil
 } 
+
+func check(e error) {
+	if e != nil {
+		fmt.Printf("%+v\n", e)
+		panic(e)
+	}
+}
