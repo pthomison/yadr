@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"os"
 	"github.com/pthomison/yadr/registry"
 )
 
@@ -15,10 +14,7 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	check(rootCmd.Execute())
 }
 
 func init() {
@@ -29,9 +25,14 @@ func init() {
 func run(cmd *cobra.Command, args []string) {
 	fmt.Println("hi")
 
-	r := &registry.Registry{
-		StorageLocation: "./pjt-testing",
-	}
+	r, err := registry.New("/hacking/data")
+	check(err)
 
 	r.Serve()
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }

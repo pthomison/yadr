@@ -1,6 +1,6 @@
 
 run:
-	docker run -it --rm -v "$(PWD):/hacking" -w "/hacking" -p "5000:5000" golang:latest go run main.go
+	docker run -it --rm -v "$(PWD):/hacking" -w "/hacking" -p "5000:5000" -e "GOCACHE=/tmp/" -u "1000:1000" golang:latest go run main.go
 
 test:
 	docker run -it --rm -v "$(PWD):/hacking" -w "/hacking" golang:latest go test -v ./...
@@ -24,5 +24,8 @@ clearregistrydata:
 runtestregistry:
 	docker pull fedora:32 
 	docker tag fedora:32 127.0.0.1:5000/fedora:latest
-	docker run -it --rm -d --name registry -p 5000:5000 registry:2 
+	docker run -it --rm --name registry -p 5000:5000 registry:2 
+# 	docker push 127.0.0.1:5000/fedora:latest
+
+pushtestregistry:
 	docker push 127.0.0.1:5000/fedora:latest
