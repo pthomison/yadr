@@ -1,18 +1,39 @@
 
 run:
-	docker run -it --rm -v "$(PWD):/hacking" -w "/hacking" -p "5000:5000" -e "GOCACHE=/tmp/" -u "1000:1000" golang:latest go run main.go
+	docker run \
+	-it --rm \
+	-v "$(PWD):/hacking" \
+	-w "/hacking" \
+	-p "5000:5000" \
+	-e "GOCACHE=/tmp/" \
+	-u "1000:1000" \
+	golang:latest \
+	go run main.go
 
-test:
-	docker run -it --rm -v "$(PWD):/hacking" -w "/hacking" golang:latest go test -v ./...
+delve:
+	docker run \
+	-it --rm \
+	--entrypoint='' \
+	-v "$(PWD):/go/src/github.com/pthomison/yadr" \
+	-w "/go/src/github.com/pthomison/yadr" \
+	-p "5000:5000" \
+	-e "GOCACHE=/tmp/" \
+	-e "HOME=/tmp/" \
+	-u "1000:1000" \
+	moogar0880/delve \
+	dlv debug main.go
+
+# test:
+# 	docker run -it --rm -v "$(PWD):/hacking" -w "/hacking" golang:latest go test -v ./...
 
 
 bash:
 	docker run -it --rm -v "$(PWD):/hacking" -w "/hacking" golang:latest /bin/bash
 
-loadtestlayers:
-	docker run -it --rm -d --name registry -p 5000:5000 registry:2 
-	docker push 127.0.0.1:5000/fedora:latest
-	docker cp registry:/var/lib/registry/docker/registry/v2/ ./tmp-data
+# loadtestlayers:
+# 	docker run -it --rm -d --name registry -p 5000:5000 registry:2 
+# 	docker push 127.0.0.1:5000/fedora:latest
+# 	docker cp registry:/var/lib/registry/docker/registry/v2/ ./tmp-data
 
 cleartest:
 	docker rm -f registry

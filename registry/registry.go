@@ -7,6 +7,10 @@ import (
 	"fmt"
 )
 
+const(
+	hashType = "sha256"
+)
+
 type Registry struct {
 	StorageLocation string
 }
@@ -35,24 +39,32 @@ func (r *Registry) Serve() {
 func (r *Registry) SetAPI() {
     router := mux.NewRouter()
     router.HandleFunc(BaseAPI, BaseGetHandler).
-    	Methods("GET")
+    	Methods(http.MethodGet)
 
     // MANIFEST HANDLERS
     router.HandleFunc(ManifestAPI, r.ManifestPutHandlerFactory()).
-    	Methods("PUT")
+    	Methods(http.MethodPut)
+
+    router.HandleFunc(ManifestAPI, r.ManifestGetHandlerFactory()).
+    	Methods(http.MethodGet)
+
+    	
 
     // BLOB HANDLERS
+    router.HandleFunc(BlobAPI, r.BlobGetHandlerFactory()).
+    	Methods(http.MethodGet)
+
     router.HandleFunc(BlobAPI, r.BlobHeadHandlerFactory()).
-    	Methods("HEAD")
+    	Methods(http.MethodHead)
 
     router.HandleFunc(BlobUploadRequestAPI, r.BlobUploadRequestPostHandlerFactory()).
-    	Methods("POST")
+    	Methods(http.MethodPost)
     
     router.HandleFunc(BlobUploadAPI, r.BlobUploadPatchFactory()).
-    	Methods("PATCH")
+    	Methods(http.MethodPatch)
 
     router.HandleFunc(BlobUploadAPI, r.BlobUploadCompletePostFactory()).
-    	Methods("PUT").
+    	Methods(http.MethodPut).
     	Queries("digest", "{digest}")
 
 
