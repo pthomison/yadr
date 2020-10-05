@@ -48,22 +48,6 @@ func (r *Registry) checkForBlob(descriptor string) (bool, int64) {
 	return false, 0
 }
 
-// func (r *Registry) sendBlob(descriptor string) error {
-// 	blobLocation := r.StorageLocation + blobFolder + descriptor
-
-// 	check(err)
-
-// 	for _, file := range files {
-// 		fmt.Printf(file.Name())
-// 		if file.Name() == descriptor {
-// 			length := file.Size()
-// 			return true, length
-// 		}
-// 	}	
-
-// 	return false, 0
-// }
-
 func (r *Registry) moveBlobUpload(uuid string, descriptor string) error {
 	uploadLocation := r.StorageLocation + uploadFolder + uuid
 	blobLocation := r.StorageLocation + blobFolder + descriptor

@@ -11,4 +11,3 @@ const(
 
 	ManifestAPI = BaseAPI + "{image}/manifests/{reference}"
 )
-

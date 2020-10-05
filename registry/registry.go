@@ -51,16 +51,16 @@ func (r *Registry) SetAPI() {
     	
 
     // BLOB HANDLERS
-    router.HandleFunc(BlobAPI, r.BlobGetHandlerFactory()).
+    router.HandleFunc(BlobAPI, r.RequireBlobDigest(r.GetBlob)).
     	Methods(http.MethodGet)
 
-    router.HandleFunc(BlobAPI, r.BlobHeadHandlerFactory()).
+    router.HandleFunc(BlobAPI, r.RequireBlobDigest(r.HeadBlob)).
     	Methods(http.MethodHead)
 
-    router.HandleFunc(BlobUploadRequestAPI, r.BlobUploadRequestPostHandlerFactory()).
+    router.HandleFunc(BlobUploadRequestAPI, r.PostBlobUploadRequest).
     	Methods(http.MethodPost)
     
-    router.HandleFunc(BlobUploadAPI, r.BlobUploadPatchFactory()).
+    router.HandleFunc(BlobUploadAPI, r.PatchBlobUpload).
     	Methods(http.MethodPatch)
 
     router.HandleFunc(BlobUploadAPI, r.BlobUploadCompletePostFactory()).
