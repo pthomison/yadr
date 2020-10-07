@@ -1,19 +1,25 @@
 package registry
 
 import(
-	// "crypto/sha256"
-	"net/http"
-	"fmt"
-	// "encoding/json"
-	// "os"
-	"io"
 	"io/ioutil"
-
-	"github.com/gorilla/mux"
 	"strings"
 
+	// "io/ioutil"
+	"fmt"
+	"os"
+
+	"crypto/sha256"
+
+	"bytes"
+	"io"
 )
 
+type Manifest struct {
+	blob *Blob
+	tag string
+	digest string
+	image string
+}
 
 // type manifest struct {
 // 	SchemaVersion int `json:"schemaVersion"`
@@ -34,60 +40,70 @@ import(
 // }
 
 
-func (r *Registry) ManifestPutHandlerFactory() func(w http.ResponseWriter, req *http.Request) {
-	return func(w http.ResponseWriter, req *http.Request) {
-		fmt.Println("\n\n --- Manifest Put Handler")
+func (r *Registry) manifestInit(image string, reference string) (*Manifest, error) {
 
-		vars := mux.Vars(req)
-	
-		manifest, size, err := r.writeManifestTag(vars["image"], vars["reference"], io.Reader(req.Body))
-		check(err)
-
-		w.Header().Set("Content-Length", fmt.Sprintf("%v", size))
-		w.Header().Set("Docker-Content-Digest", manifest)
-
-	    w.Header().Set("Accept-Encoding", "gzip")
-
-	    w.WriteHeader(http.StatusCreated)
-	}
 }
 
-func (r *Registry) ManifestGetHandlerFactory() func(w http.ResponseWriter, req *http.Request) {
-	return func(w http.ResponseWriter, req *http.Request) {
-		fmt.Println("\n\n --- Manifest Get Handler")
-
-		vars := mux.Vars(req)
-		image := vars["image"]
-		reference := vars["reference"]
-
-		var manifest []byte
-		var err error
-		var hash string
-
-		fmt.Println("Sending Manifest")
-
-		if isHash(reference, hashType) {
-			fmt.Println("Hash Requested")
-			hash = reference
-		} else {
-			fmt.Println("Tag Requested")
-			hash, err = r.lookupTag(image, reference)
-			check(err)
-		}
-
-		manifest, err = r.readManifest(image, hash)
-		check(err)
-
-		w.Header().Set("Content-Type", "application/vnd.docker.distribution.manifest.v2+json")
-		w.Header().Set("Docker-Content-Digest", hash)
-
-		fmt.Println("Write Header")
-
-	    w.WriteHeader(http.StatusOK)
-
-	    w.Write(manifest)
+func (r *Registry) writeManifestDigest(image string, rd io.Reader) (string, int64, error) {
+	err := r.createImageFolder(image)
+	if err != nil {
+		return "", 0, err
 	}
-}
+
+	var buf bytes.Buffer
+
+	_, err = io.Copy(&buf, rd)
+	if err != nil {
+		return "", 0, err
+	}
+
+	hash := sha256.Sum256(buf.Bytes())
+	digest := fmt.Sprintf("sha256:%x", hash)
+
+	// fmt.Printf("Buff: %+v\n", string(buf.Bytes()))
+	// fmt.Printf("Hash: %+v\n", digest)
+
+    f, err := os.Create(r.StorageLocation + manifestFolder + image + "/index/" + digest )
+
+    if err != nil {
+        return "", 0, err
+    }
+
+    defer f.Close()
+
+	c, err := io.Copy(f, &buf)
+
+	return digest, c, nil
+} 
+
+func (r *Registry) writeManifestTag(image string, tag string, rd io.Reader) (string, int64, error) {
+	digest, size, err := r.writeManifestDigest(image, rd)
+	if err != nil {
+		return "", 0, err
+	}
+
+	err = os.MkdirAll(r.StorageLocation + manifestFolder + image + "/tags/" + tag, storageFolderPerms)
+	if err != nil {
+		return "", 0, err
+	}
+
+    f, err := os.Create(r.StorageLocation + manifestFolder + image + "/tags/" + tag + "/link" )
+
+    if err != nil {
+		return "", 0, err
+    }
+
+    defer f.Close()
+
+	_, err = f.WriteString(digest)
+
+    if err != nil {
+		return "", 0, err
+    }
+
+	return digest, size, nil
+} 
+
 
 func (r *Registry) readManifest(image string, hash string) ([]byte, error) {
 	manifestLocation := r.StorageLocation + manifestFolder + image + "/index/" + hash

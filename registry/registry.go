@@ -63,7 +63,7 @@ func (r *Registry) SetAPI() {
     router.HandleFunc(BlobUploadAPI, r.PatchBlobUpload).
     	Methods(http.MethodPatch)
 
-    router.HandleFunc(BlobUploadAPI, r.BlobUploadCompletePostFactory()).
+    router.HandleFunc(BlobUploadAPI, r.PostBlobUploadComplete).
     	Methods(http.MethodPut).
     	Queries("digest", "{digest}")
 
