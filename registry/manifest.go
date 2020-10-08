@@ -40,9 +40,9 @@ type Manifest struct {
 // }
 
 
-func (r *Registry) manifestInit(image string, reference string) (*Manifest, error) {
+// func (r *Registry) manifestInit(image string, reference string) (*Manifest, error) {
 
-}
+// }
 
 func (r *Registry) writeManifestDigest(image string, rd io.Reader) (string, int64, error) {
 	err := r.createImageFolder(image)
