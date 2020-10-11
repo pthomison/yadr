@@ -10,6 +10,11 @@ import (
     "path"
 )
 
+var(
+	dataDirectory string
+	logLevel string
+)
+
 var rootCmd = &cobra.Command{
 	Use:   AppName,
 	Short: "",
@@ -22,8 +27,8 @@ func Execute() {
 }
 
 func init() {
-	// rootCmd.PersistentFlags().StringVar(&awsProfile, "profile", "", "aws profile to use")
-	// rootCmd.PersistentFlags().StringVar(&awsRegion, "region", "us-west-2", "aws region to use")
+	rootCmd.PersistentFlags().StringVar(&dataDirectory, "data-directory", "./data", "where to store registry data")
+	rootCmd.PersistentFlags().StringVar(&logLevel, "log-level", "INFO", "INFO/DEBUG/ERROR")
 }
 
 func run(cmd *cobra.Command, args []string) {
@@ -31,7 +36,7 @@ func run(cmd *cobra.Command, args []string) {
 
 	logrus.Info("Hi! Starting yadr server...")
 
-	r, err := registry.New("/hacking/data")
+	r, err := registry.New(dataDirectory)
 	check(err)
 
 	r.Serve()
@@ -46,8 +51,21 @@ func logInit() {
 	    },
     })
 
+    var level logrus.Level
+
+	switch logLevel {
+	case "DEBUG":
+		level = logrus.DebugLevel
+	case "INFO":
+		level = logrus.InfoLevel
+	case "ERROR":
+		level = logrus.ErrorLevel
+	default:
+		level = logrus.DebugLevel
+	}
+
 	logrus.SetOutput(os.Stdout)
-	logrus.SetLevel(logrus.DebugLevel)
+	logrus.SetLevel(level)
 	logrus.SetReportCaller(true)
 }
 

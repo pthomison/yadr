@@ -1,28 +1,34 @@
-
+define golang_docker_exec 
+docker run \
+-it --rm \
+-v "$(PWD):/hacking" \
+-w "/hacking" \
+-p "5000:5000" \
+-e "GOCACHE=/tmp/" \
+-e "CGO_ENABLED=0" \
+-u "1000:1000" \
+golang:latest
+endef
 
 run:
-	docker run \
-	-it --rm \
-	-v "$(PWD):/hacking" \
-	-w "/hacking" \
-	-p "5000:5000" \
-	-e "GOCACHE=/tmp/" \
-	-u "1000:1000" \
-	golang:latest \
-	go run main.go
-
-runclean:
 	clear
+	$(golang_docker_exec) go run main.go --data-directory /hacking/data
+
+build:
+	clear
+	$(golang_docker_exec) go build -o yadr main.go
+
+image:
+	clear
+	docker build . -t yadr:latest
+
+runimage: image
+	docker run -it --rm -p "5000:5000" yadr
+
+cleardata:
 	rm -rf ./data
-	docker run \
-	-it --rm \
-	-v "$(PWD):/hacking" \
-	-w "/hacking" \
-	-p "5000:5000" \
-	-e "GOCACHE=/tmp/" \
-	-u "1000:1000" \
-	golang:latest \
-	go run main.go
+
+runclean: cleardata run
 
 test: pushtest pulltest
 
@@ -48,8 +54,3 @@ compliance:
 	pthomison/oci-conformance-registry-tester:latest || true
 	docker cp conform:/report.html ./conformance-report.html
 	docker rm -f conform
-
-export 
-export OCI_NAMESPACE="myorg/myrepo"
-export OCI_USERNAME="myuser"
-export OCI_PASSWORD="mypass"

@@ -28,11 +28,14 @@ func (r *Registry) PutManifest(w http.ResponseWriter, req *http.Request) {
 		image, err = r.ImageInit(imageName)
 		check(err)
 		r.images[imageName] = image
+		logrus.Info("Image Added: ", imageName)
 	}
 
 
 	m, err := image.AddManifest(reference, io.Reader(req.Body))
 	check(err)
+	logrus.Info("Manifest Added: ", reference)
+
 
 	w.Header().Set("Location", fmt.Sprintf("/v2/%s/manifests/%s", image, m.digest))
 	w.Header().Set("Docker-Content-Digest", m.digest)
@@ -40,7 +43,7 @@ func (r *Registry) PutManifest(w http.ResponseWriter, req *http.Request) {
 }
 
 func (r *Registry) DeleteManifest(w http.ResponseWriter, req *http.Request) {
-	logrus.Debug("Manifest Put Handler Called")
+	logrus.Debug("Manifest Delete Handler Called")
 
 	vars := mux.Vars(req)
 	reference := vars["reference"]
@@ -55,12 +58,13 @@ func (r *Registry) DeleteManifest(w http.ResponseWriter, req *http.Request) {
 
 	err := i.DeleteReference(reference)
 	check(err)
+	logrus.Info("Manifest Deleted: ", reference)
 
     w.WriteHeader(http.StatusAccepted)
 }
 
 func (r *Registry) GetManifest(w http.ResponseWriter, req *http.Request) {
-	logrus.Debug("Manifest Put Handler Called")
+	logrus.Debug("Manifest Get Handler Called")
 
 	var m *Manifest
 
