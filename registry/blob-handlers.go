@@ -9,10 +9,12 @@ import(
 
 	"path/filepath"
 
+
+    "github.com/sirupsen/logrus"
 )
 
 func (r *Registry) HeadBlob(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("\n\n --- Blob Head Handler Called")
+	logrus.Debug("Blob Head Handler Called")
 
 	vars := mux.Vars(req)
 	digest := vars["digest"]
@@ -30,14 +32,11 @@ func (r *Registry) HeadBlob(w http.ResponseWriter, req *http.Request) {
 }
 
 func (r *Registry) GetBlob(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("\n\n --- Blob Get Handler Called")
+	logrus.Debug("Blob Get Handler Called")
 
 
 	vars := mux.Vars(req)
 	digest := vars["digest"]
-
-    fmt.Printf("%+v\n", r.blobs)
-    fmt.Printf("%+v\n", digest)
 
 
 	b, exists := r.blobs[digest]
@@ -54,14 +53,14 @@ func (r *Registry) GetBlob(w http.ResponseWriter, req *http.Request) {
 
 
 	} else {
-		fmt.Println("\n\n --- Blob Not Found")
+		logrus.Debug("Blob Not Found")
 
     	w.WriteHeader(http.StatusNotFound)
 	}
 }
 
 func (r *Registry) DeleteBlob(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("\n\n --- Blob Delete Handler Called")
+	logrus.Debug("Blob Delete Handler Called")
 
 	vars := mux.Vars(req)
 	digest := vars["digest"]
@@ -83,7 +82,7 @@ func (r *Registry) DeleteBlob(w http.ResponseWriter, req *http.Request) {
 
 // end of all upload types
 func (r *Registry) CompleteBlobUpload(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("\n\n --- Complete Blob Upload")
+	logrus.Debug("Complete Blob Upload")
 
 	vars := mux.Vars(req)
 	image := vars["image"]
@@ -127,12 +126,14 @@ func (r *Registry) CompleteBlobUpload(w http.ResponseWriter, req *http.Request) 
 	w.Header().Set("Location", fmt.Sprintf("/v2/%s/blobs/%s", image, b.digest))
     w.Header().Set("Range", fmt.Sprintf("0-%v", b.contentLength))
 	w.WriteHeader(http.StatusCreated)
+
+	logrus.Info("Blob Uploaded: ", b.digest)
 }
 
 
 // always accept
 func (r *Registry) RequestBlobUpload(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("\n\n --- Blob Upload Request")
+	logrus.Debug("Blob Upload Request")
 
 	vars := mux.Vars(req)
 	image := vars["image"]
@@ -154,7 +155,7 @@ func (r *Registry) RequestBlobUpload(w http.ResponseWriter, req *http.Request) {
 
 // chunked upload
 func (r *Registry) PatchBlobUpload(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("\n\n --- Blob Upload Patch Handler")
+	logrus.Debug("Blob Upload Patch Handler")
 
 	vars := mux.Vars(req)
 	image := vars["image"]

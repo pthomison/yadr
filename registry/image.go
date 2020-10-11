@@ -7,9 +7,6 @@ import(
 	"io/ioutil"
 	"fmt"
 	"crypto/sha256"
-	// "net/http"
-	// "github.com/gorilla/mux"
-
 )
 
 type Image struct {
@@ -57,8 +54,6 @@ func (r *Registry) ImageInit(name string) (*Image, error) {
 
 func (i *Image) Scan() error {
 
-	fmt.Printf("%+v\n", i)
-
 	indexFiles, err := ioutil.ReadDir(i.indexLocation)
 	if err != nil {
 		return err
@@ -68,9 +63,6 @@ func (i *Image) Scan() error {
 	if err != nil {
 		return err
 	}
-
-	fmt.Printf("files grabbed\n")
-
 
 	for _, f := range indexFiles {
 		digest := f.Name()
@@ -82,8 +74,6 @@ func (i *Image) Scan() error {
 			}
 		}
 	}
-
-	fmt.Printf("index done\n")
 
 	for _, f := range tagFiles {
 		tag := f.Name()

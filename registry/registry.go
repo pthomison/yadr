@@ -4,8 +4,9 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"os"
-	"fmt"
     "io/ioutil"
+
+    "github.com/sirupsen/logrus"
 )
 
 const(
@@ -49,8 +50,6 @@ func New(storagePath string) (*Registry, error) {
     if err != nil {
         return nil, err
     }    
-
-    fmt.Printf("%+v\n", r.blobs)
 
 	r.SetAPI()
 
@@ -136,8 +135,7 @@ func (r *Registry) InitializeStorage() error {
 
 func check(e error) {
 	if e != nil {
-		fmt.Printf("%+v\n", e)
-		panic(e)
+        logrus.Panic(e)        
 	}
 }
 

@@ -2,8 +2,12 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"runtime"
 	"github.com/spf13/cobra"
 	"github.com/pthomison/yadr/registry"
+    "github.com/sirupsen/logrus"
+    "path"
 )
 
 var rootCmd = &cobra.Command{
@@ -23,7 +27,9 @@ func init() {
 }
 
 func run(cmd *cobra.Command, args []string) {
-	fmt.Println("hi")
+	logInit()
+
+	logrus.Info("Hi! Starting yadr server...")
 
 	r, err := registry.New("/hacking/data")
 	check(err)
@@ -31,8 +37,22 @@ func run(cmd *cobra.Command, args []string) {
 	r.Serve()
 }
 
+func logInit() {
+    logrus.SetFormatter(&logrus.TextFormatter{
+	    CallerPrettyfier: func(f *runtime.Frame) (function string, file string) {
+	        function = ""
+	        file = fmt.Sprintf("%s:%d", path.Base(f.File), f.Line)
+	        return 
+	    },
+    })
+
+	logrus.SetOutput(os.Stdout)
+	logrus.SetLevel(logrus.DebugLevel)
+	logrus.SetReportCaller(true)
+}
+
 func check(e error) {
 	if e != nil {
-		panic(e)
+		logrus.Panic(e)
 	}
 }

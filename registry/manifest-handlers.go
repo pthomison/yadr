@@ -9,10 +9,12 @@ import(
 	"github.com/gorilla/mux"
 	"encoding/json"
 
+    "github.com/sirupsen/logrus"
+
 )
 
 func (r *Registry) PutManifest(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("\n\n --- Manifest Put Handler Called")
+	logrus.Debug("Manifest Put Handler Called")
 
 	var err error
 
@@ -38,7 +40,7 @@ func (r *Registry) PutManifest(w http.ResponseWriter, req *http.Request) {
 }
 
 func (r *Registry) DeleteManifest(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("\n\n --- Manifest Put Handler Called")
+	logrus.Debug("Manifest Put Handler Called")
 
 	vars := mux.Vars(req)
 	reference := vars["reference"]
@@ -58,7 +60,7 @@ func (r *Registry) DeleteManifest(w http.ResponseWriter, req *http.Request) {
 }
 
 func (r *Registry) GetManifest(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("\n\n --- Manifest Put Handler Called")
+	logrus.Debug("Manifest Put Handler Called")
 
 	var m *Manifest
 
@@ -93,7 +95,7 @@ func (r *Registry) GetManifest(w http.ResponseWriter, req *http.Request) {
 }
 
 func (r *Registry) ListTags(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("\n\n --- List Tags Called")
+	logrus.Debug("List Tags Called")
 
 	// var m *Manifest
 

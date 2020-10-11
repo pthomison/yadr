@@ -7,11 +7,6 @@ import(
 
 	"crypto/sha256"
 	"strings"
-
-
-	// "bytes"
-	// "io"
-
 )
 
 const(
