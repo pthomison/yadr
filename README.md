@@ -15,10 +15,10 @@ No authentication, no encryption, no problem? This is a learning project that sh
 
 #### Go Packages Used:
 
-Gorilla Mux: github.com/gorilla/mux
-Logrus: github.com/sirupsen/logrus
-UUID: github.com/google/uuid
-Cobra: github.com/spf13/cobra
+| Gorilla Mux | github.com/gorilla/mux                |
+| Logrus      | github.com/sirupsen/logrus            |
+| UUID        | github.com/google/uuid                |
+| Cobra       | github.com/spf13/cobra                |
 
 #### Standards/Documentation Used:
 OCI Spec: https://github.com/opencontainers/distribution-spec/blob/master/spec.md
@@ -37,6 +37,6 @@ or
 
 The compliance task will render an html document in the project directory with the test results
 
-TODO List:
+#### TODO List:
 - Need to check manifest type (ie parse the json content)
 - Check & correctly deal with Range headers on chunked upload
