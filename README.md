@@ -14,16 +14,18 @@ No authentication, no encryption, no problem? This is a learning project that sh
 
 
 #### Go Packages Used:
-| Packages    |                            |
-|-------------|----------------------------|
-| Gorilla Mux | github.com/gorilla/mux     |
-| Logrus      | github.com/sirupsen/logrus |
-| UUID        | github.com/google/uuid     |
-| Cobra       | github.com/spf13/cobra     |
+| Packages    |                                    |
+|-------------|------------------------------------|
+| Gorilla Mux | https://github.com/gorilla/mux     |
+| Logrus      | https://github.com/sirupsen/logrus |
+| UUID        | https://github.com/google/uuid     |
+| Cobra       | https://github.com/spf13/cobra     |
 
 #### Standards/Documentation Used:
-OCI Spec: https://github.com/opencontainers/distribution-spec/blob/master/spec.md
-Docker Registry API (V2) Spec: https://github.com/docker/distribution/blob/5cb406d511b7b9163bff9b6439072e4892e5ae3b/docs/spec/api.md
+| Doc                           |                                                                                                       |
+|-------------------------------|-------------------------------------------------------------------------------------------------------|
+| OCI Spec                      | https://github.com/opencontainers/distribution-spec/blob/master/spec.md                               |
+| Docker Registry API (V2) Spec | https://github.com/docker/distribution/blob/5cb406d511b7b9163bff9b6439072e4892e5ae3b/docs/spec/api.md |
 
 
 #### Do the thing:
