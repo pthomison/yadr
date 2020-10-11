@@ -1,6 +1,6 @@
 ### YADR: Yet Another Docker Registry
 
-YADR is an attempt to build an OCI compliant docker registry with as little complexity as possible
+YADR is an attempt to build an OCI compliant image registry with as little complexity as possible
 
 No authentication, no encryption, no problem? This is a learning project that should not run anywhere close to a production environment
 
