@@ -1,21 +1,21 @@
 package registry
 
-import(
-	"io/ioutil"
+import (
 	"fmt"
+	"io/ioutil"
 	"os"
 
 	"crypto/sha256"
 	"strings"
 )
 
-const(
-	blobFolder = "/blobs/"
+const (
+	blobFolder     = "/blobs/"
 	manifestFolder = "/manifests/"
-	uploadFolder = "/uploads/"
+	uploadFolder   = "/uploads/"
 
 	storageFolderPerms = 0777
-	storageFilePerms = 0777
+	storageFilePerms   = 0777
 )
 
 func hashFile(filename string) (string, error) {
@@ -39,24 +39,24 @@ func (r *Registry) checkForBlob(descriptor string) (bool, int64) {
 			length := file.Size()
 			return true, length
 		}
-	}	
+	}
 
 	return false, 0
 }
 
 func (r *Registry) ensureImageFolder(image string) error {
-	err := os.MkdirAll(r.ManifestFolder + image + "/tags", storageFolderPerms)
+	err := os.MkdirAll(r.ManifestFolder+image+"/tags", storageFolderPerms)
 	if err != nil {
 		return err
 	}
 
-	err = os.MkdirAll(r.ManifestFolder + image + "/index", storageFolderPerms)
+	err = os.MkdirAll(r.ManifestFolder+image+"/index", storageFolderPerms)
 	if err != nil {
 		return err
 	}
 
 	return nil
-} 
+}
 
 func isHash(reference string, hashType string) bool {
 	if strings.Contains(reference, hashType) {

@@ -1,16 +1,15 @@
 package registry
 
-import(
-	"net/http"
+import (
 	"fmt"
 	"github.com/gorilla/mux"
+	"net/http"
 
 	"github.com/google/uuid"
 
 	"path/filepath"
 
-
-    "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 func (r *Registry) HeadBlob(w http.ResponseWriter, req *http.Request) {
@@ -27,17 +26,15 @@ func (r *Registry) HeadBlob(w http.ResponseWriter, req *http.Request) {
 
 		w.WriteHeader(http.StatusOK)
 	} else {
-    	w.WriteHeader(http.StatusNotFound)
+		w.WriteHeader(http.StatusNotFound)
 	}
 }
 
 func (r *Registry) GetBlob(w http.ResponseWriter, req *http.Request) {
 	logrus.Debug("Blob Get Handler Called")
 
-
 	vars := mux.Vars(req)
 	digest := vars["digest"]
-
 
 	b, exists := r.blobs[digest]
 
@@ -51,11 +48,10 @@ func (r *Registry) GetBlob(w http.ResponseWriter, req *http.Request) {
 		err := b.SendData(w)
 		check(err)
 
-
 	} else {
 		logrus.Debug("Blob Not Found")
 
-    	w.WriteHeader(http.StatusNotFound)
+		w.WriteHeader(http.StatusNotFound)
 	}
 }
 
@@ -76,7 +72,7 @@ func (r *Registry) DeleteBlob(w http.ResponseWriter, req *http.Request) {
 		w.WriteHeader(http.StatusAccepted)
 
 	} else {
-    	w.WriteHeader(http.StatusNotFound)
+		w.WriteHeader(http.StatusNotFound)
 	}
 }
 
@@ -86,19 +82,18 @@ func (r *Registry) CompleteBlobUpload(w http.ResponseWriter, req *http.Request) 
 
 	vars := mux.Vars(req)
 	image := vars["image"]
-	var digest string 
+	var digest string
 	var id string
 
 	if val, ok := vars["digest"]; ok {
-	    digest = val
+		digest = val
 	} else {
 		id = uuid.New().String()
 		w.WriteHeader(http.StatusBadRequest)
 	}
 
-
 	if val, ok := vars["sessionID"]; ok {
-	    id = val
+		id = val
 	} else {
 		id = uuid.New().String()
 	}
@@ -108,8 +103,7 @@ func (r *Registry) CompleteBlobUpload(w http.ResponseWriter, req *http.Request) 
 	if req.Header.Get("Content-Length") != "0" {
 		err := u.StoreUploadData(req.Body)
 		check(err)
-	} 
-
+	}
 
 	b, err := r.ProcessUpload(u)
 	if err != nil {
@@ -124,12 +118,11 @@ func (r *Registry) CompleteBlobUpload(w http.ResponseWriter, req *http.Request) 
 	}
 
 	w.Header().Set("Location", fmt.Sprintf("/v2/%s/blobs/%s", image, b.digest))
-    w.Header().Set("Range", fmt.Sprintf("0-%v", b.contentLength))
+	w.Header().Set("Range", fmt.Sprintf("0-%v", b.contentLength))
 	w.WriteHeader(http.StatusCreated)
 
 	logrus.Info("Blob Uploaded: ", b.digest)
 }
-
 
 // always accept
 func (r *Registry) RequestBlobUpload(w http.ResponseWriter, req *http.Request) {
@@ -173,7 +166,7 @@ func (r *Registry) PatchBlobUpload(w http.ResponseWriter, req *http.Request) {
 	err := u.StoreUploadData(req.Body)
 	check(err)
 
-    w.Header().Set("Location", u.url)
-    w.Header().Set("Range", fmt.Sprintf("0-%v", u.contentLength))
+	w.Header().Set("Location", u.url)
+	w.Header().Set("Range", fmt.Sprintf("0-%v", u.contentLength))
 	w.WriteHeader(http.StatusAccepted)
 }

@@ -1,16 +1,15 @@
 package registry
 
-import(
-	"net/http"
+import (
 	"fmt"
+	"net/http"
 
 	"io"
 
-	"github.com/gorilla/mux"
 	"encoding/json"
+	"github.com/gorilla/mux"
 
-    "github.com/sirupsen/logrus"
-
+	"github.com/sirupsen/logrus"
 )
 
 func (r *Registry) PutManifest(w http.ResponseWriter, req *http.Request) {
@@ -31,15 +30,13 @@ func (r *Registry) PutManifest(w http.ResponseWriter, req *http.Request) {
 		logrus.Info("Image Added: ", imageName)
 	}
 
-
 	m, err := image.AddManifest(reference, io.Reader(req.Body))
 	check(err)
 	logrus.Info("Manifest Added: ", reference)
 
-
 	w.Header().Set("Location", fmt.Sprintf("/v2/%s/manifests/%s", image, m.digest))
 	w.Header().Set("Docker-Content-Digest", m.digest)
-    w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusCreated)
 }
 
 func (r *Registry) DeleteManifest(w http.ResponseWriter, req *http.Request) {
@@ -52,15 +49,15 @@ func (r *Registry) DeleteManifest(w http.ResponseWriter, req *http.Request) {
 	i, exists := r.images[image]
 
 	if !exists {
-	    w.WriteHeader(http.StatusNotFound)
-	    return
+		w.WriteHeader(http.StatusNotFound)
+		return
 	}
 
 	err := i.DeleteReference(reference)
 	check(err)
 	logrus.Info("Manifest Deleted: ", reference)
 
-    w.WriteHeader(http.StatusAccepted)
+	w.WriteHeader(http.StatusAccepted)
 }
 
 func (r *Registry) GetManifest(w http.ResponseWriter, req *http.Request) {
@@ -75,8 +72,8 @@ func (r *Registry) GetManifest(w http.ResponseWriter, req *http.Request) {
 	i, exists := r.images[image]
 
 	if !exists {
-	    w.WriteHeader(http.StatusNotFound)
-	    return
+		w.WriteHeader(http.StatusNotFound)
+		return
 	}
 
 	if isHash(reference, hashType) {
@@ -86,8 +83,8 @@ func (r *Registry) GetManifest(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if !exists {
-	    w.WriteHeader(http.StatusNotFound)
-	    return
+		w.WriteHeader(http.StatusNotFound)
+		return
 	}
 
 	w.Header().Set("Docker-Content-Digest", m.digest)
@@ -95,7 +92,7 @@ func (r *Registry) GetManifest(w http.ResponseWriter, req *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 
-    m.SendData(w)
+	m.SendData(w)
 }
 
 func (r *Registry) ListTags(w http.ResponseWriter, req *http.Request) {
@@ -109,8 +106,8 @@ func (r *Registry) ListTags(w http.ResponseWriter, req *http.Request) {
 	i, exists := r.images[image]
 
 	if !exists {
-	    w.WriteHeader(http.StatusNotFound)
-	    return
+		w.WriteHeader(http.StatusNotFound)
+		return
 	}
 
 	tl := &TagList{
@@ -126,4 +123,3 @@ func (r *Registry) ListTags(w http.ResponseWriter, req *http.Request) {
 
 	w.Write(b)
 }
-

@@ -1,33 +1,32 @@
 package registry
 
-import(
-	"os"
+import (
 	"io"
+	"os"
 )
 
 type Manifest struct {
-	image string
+	image        string
 	fileLocation string
-	digest string
+	digest       string
 }
-
 
 func (m *Manifest) WriteManifest(r io.Reader) error {
 	f, err := os.Create(m.fileLocation)
 
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 
-    defer f.Close()
+	defer f.Close()
 
 	_, err = io.Copy(f, r)
 
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 
-    return nil
+	return nil
 }
 
 func (m *Manifest) SendData(w io.Writer) error {

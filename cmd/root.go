@@ -2,24 +2,24 @@ package cmd
 
 import (
 	"fmt"
-	"os"
-	"runtime"
-	"github.com/spf13/cobra"
 	"github.com/pthomison/yadr/registry"
-    "github.com/sirupsen/logrus"
-    "path"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+	"os"
+	"path"
+	"runtime"
 )
 
-var(
+var (
 	dataDirectory string
-	logLevel string
+	logLevel      string
 )
 
 var rootCmd = &cobra.Command{
 	Use:   AppName,
 	Short: "",
 	Long:  ``,
-	Run: run,
+	Run:   run,
 }
 
 func Execute() {
@@ -43,15 +43,15 @@ func run(cmd *cobra.Command, args []string) {
 }
 
 func logInit() {
-    logrus.SetFormatter(&logrus.TextFormatter{
-	    CallerPrettyfier: func(f *runtime.Frame) (function string, file string) {
-	        function = ""
-	        file = fmt.Sprintf("%s:%d", path.Base(f.File), f.Line)
-	        return 
-	    },
-    })
+	logrus.SetFormatter(&logrus.TextFormatter{
+		CallerPrettyfier: func(f *runtime.Frame) (function string, file string) {
+			function = ""
+			file = fmt.Sprintf("%s:%d", path.Base(f.File), f.Line)
+			return
+		},
+	})
 
-    var level logrus.Level
+	var level logrus.Level
 
 	switch logLevel {
 	case "DEBUG":

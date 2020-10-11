@@ -1,5 +1,5 @@
 package cmd
 
-const(
+const (
 	AppName = "yadr"
 )

@@ -10,7 +10,10 @@ docker run \
 golang:latest
 endef
 
-run:
+fmt:
+	$(golang_docker_exec) go fmt ./...
+
+run: fmt
 	clear
 	$(golang_docker_exec) go run main.go --data-directory /hacking/data
 

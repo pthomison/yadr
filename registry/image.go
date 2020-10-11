@@ -1,12 +1,12 @@
 package registry
 
-import(
-	"os"
-	"io"
+import (
 	"bytes"
-	"io/ioutil"
-	"fmt"
 	"crypto/sha256"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"os"
 )
 
 type Image struct {
@@ -15,10 +15,10 @@ type Image struct {
 	// manifests stored under their tag
 	tags map[string]*Manifest
 
-	baseLocation string
+	baseLocation  string
 	indexLocation string
-	tagLocation string
-	name string
+	tagLocation   string
+	name          string
 }
 
 type TagList struct {
@@ -35,14 +35,14 @@ func (r *Registry) ImageInit(name string) (*Image, error) {
 	basePath := r.ManifestFolder + name
 
 	i := &Image{
-		name: name,
-		baseLocation: basePath,
+		name:          name,
+		baseLocation:  basePath,
 		indexLocation: basePath + "/index/",
-		tagLocation: basePath + "/tags/",
+		tagLocation:   basePath + "/tags/",
 	}
 
-    i.manifests = make(map[string]*Manifest)
-    i.tags = make(map[string]*Manifest)
+	i.manifests = make(map[string]*Manifest)
+	i.tags = make(map[string]*Manifest)
 
 	err = i.Scan()
 	if err != nil {
@@ -68,9 +68,9 @@ func (i *Image) Scan() error {
 		digest := f.Name()
 		if isHash(digest, hashType) {
 			i.manifests[digest] = &Manifest{
-				image: i.name,
+				image:        i.name,
 				fileLocation: i.indexLocation + digest,
-				digest: digest,
+				digest:       digest,
 			}
 		}
 	}
@@ -86,9 +86,9 @@ func (i *Image) Scan() error {
 		digest := string(d)
 		if isHash(digest, hashType) {
 			i.manifests[digest] = &Manifest{
-				image: i.name,
+				image:        i.name,
 				fileLocation: i.indexLocation + digest,
-				digest: digest,
+				digest:       digest,
 			}
 		}
 	}
@@ -99,7 +99,6 @@ func (i *Image) Scan() error {
 func (i *Image) DeleteReference(reference string) error {
 	_, isTag := i.tags[reference]
 	m, isDigest := i.manifests[reference]
-
 
 	if isTag {
 		delete(i.tags, reference)
@@ -129,9 +128,9 @@ func (i *Image) AddManifest(reference string, rd io.Reader) (*Manifest, error) {
 
 	if !exists {
 		m = &Manifest{
-			image: i.name,
+			image:        i.name,
 			fileLocation: i.indexLocation + computedDigest,
-			digest: computedDigest,
+			digest:       computedDigest,
 		}
 		err = m.WriteManifest(rd)
 		if err != nil {
@@ -140,9 +139,8 @@ func (i *Image) AddManifest(reference string, rd io.Reader) (*Manifest, error) {
 		i.manifests[computedDigest] = m
 	}
 
-
-	if ! isHash(reference, hashType) {
-		err := ioutil.WriteFile(i.tagLocation + reference, []byte(computedDigest), 0644)
+	if !isHash(reference, hashType) {
+		err := ioutil.WriteFile(i.tagLocation+reference, []byte(computedDigest), 0644)
 		if err != nil {
 			return nil, err
 		}

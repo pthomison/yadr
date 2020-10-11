@@ -1,34 +1,33 @@
 package registry
 
-import(
-	"os"
+import (
 	"io"
+	"os"
 	// "io/ioutil"
 	"fmt"
-
 )
 
 type Blob struct {
-	digest string
+	digest        string
 	contentLength int64
-	contentType string
-	fileLocation string
-	urlLocation string
-	image string
+	contentType   string
+	fileLocation  string
+	urlLocation   string
+	image         string
 }
 
 type BlobUpload struct {
-	digest string
+	digest        string
 	contentLength int64
-	url string
-	fileLocation string
-	image string
-	id string
+	url           string
+	fileLocation  string
+	image         string
+	id            string
 }
 
 func (r *Registry) BlobInit(digest string) (*Blob, error) {
 	b := &Blob{
-		digest: digest,
+		digest:       digest,
 		fileLocation: fmt.Sprintf("%v%v", r.BlobFolder, digest),
 	}
 
@@ -47,17 +46,16 @@ func (r *Registry) BlobInit(digest string) (*Blob, error) {
 
 func (r *Registry) BlobUploadInit(image string, id string) *BlobUpload {
 	b := &BlobUpload{
-		image: image,
-		id: id,
+		image:        image,
+		id:           id,
 		fileLocation: r.UploadFolder + id,
-		url: fmt.Sprintf("/v2/%s/blobs/uploads/%s", image, id),
+		url:          fmt.Sprintf("/v2/%s/blobs/uploads/%s", image, id),
 	}
 
 	return b
 }
 
-
-func (r *Registry) ProcessUpload(u *BlobUpload)  (*Blob, error) {
+func (r *Registry) ProcessUpload(u *BlobUpload) (*Blob, error) {
 	digest, err := hashFile(u.fileLocation)
 	if err != nil {
 		return nil, err
@@ -78,7 +76,6 @@ func (r *Registry) ProcessUpload(u *BlobUpload)  (*Blob, error) {
 	return b, nil
 }
 
-
 func (b *BlobUpload) StoreUploadData(r io.Reader) error {
 	// If the file doesn't exist, create it, or append to the file
 	f, err := os.OpenFile(b.fileLocation, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -98,7 +95,6 @@ func (b *BlobUpload) StoreUploadData(r io.Reader) error {
 
 	return nil
 }
-
 
 func (b *Blob) SendData(w io.Writer) error {
 	f, err := os.Open(b.fileLocation)

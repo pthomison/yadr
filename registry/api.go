@@ -1,10 +1,10 @@
 package registry
 
-import(
+import (
 	"net/http"
 )
 
-const(
+const (
 	BaseAPI = "/v2/"
 
 	BlobUploadRequestAPI = BaseAPI + "{image}/blobs/uploads/"
