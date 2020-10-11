@@ -88,8 +88,8 @@ func (r *Registry) CompleteBlobUpload(w http.ResponseWriter, req *http.Request) 
 	if val, ok := vars["digest"]; ok {
 		digest = val
 	} else {
-		id = uuid.New().String()
 		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
 	if val, ok := vars["sessionID"]; ok {
@@ -142,7 +142,7 @@ func (r *Registry) RequestBlobUpload(w http.ResponseWriter, req *http.Request) {
 
 		w.WriteHeader(http.StatusAccepted)
 	} else {
-		w.WriteHeader(UserErrorResponse)
+		w.WriteHeader(http.StatusBadRequest)
 	}
 }
 

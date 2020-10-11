@@ -88,6 +88,7 @@ func (r *Registry) GetManifest(w http.ResponseWriter, req *http.Request) {
 	}
 
 	w.Header().Set("Docker-Content-Digest", m.digest)
+	// probably shouldn't be hardcoded.... TODO
 	w.Header().Set("Content-Type", "application/vnd.docker.distribution.manifest.v2+json")
 
 	w.WriteHeader(http.StatusOK)
@@ -97,8 +98,6 @@ func (r *Registry) GetManifest(w http.ResponseWriter, req *http.Request) {
 
 func (r *Registry) ListTags(w http.ResponseWriter, req *http.Request) {
 	logrus.Debug("List Tags Called")
-
-	// var m *Manifest
 
 	vars := mux.Vars(req)
 	image := vars["image"]

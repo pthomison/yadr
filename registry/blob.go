@@ -78,7 +78,7 @@ func (r *Registry) ProcessUpload(u *BlobUpload) (*Blob, error) {
 
 func (b *BlobUpload) StoreUploadData(r io.Reader) error {
 	// If the file doesn't exist, create it, or append to the file
-	f, err := os.OpenFile(b.fileLocation, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(b.fileLocation, os.O_APPEND|os.O_CREATE|os.O_WRONLY, storageFilePerms)
 
 	if err != nil {
 		return err

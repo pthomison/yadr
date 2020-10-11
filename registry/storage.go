@@ -14,8 +14,8 @@ const (
 	manifestFolder = "/manifests/"
 	uploadFolder   = "/uploads/"
 
-	storageFolderPerms = 0777
-	storageFilePerms   = 0777
+	storageFolderPerms = 0755
+	storageFilePerms   = 0644
 )
 
 func hashFile(filename string) (string, error) {

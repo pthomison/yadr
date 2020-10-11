@@ -1,9 +1,5 @@
 package registry
 
-import (
-	"net/http"
-)
-
 const (
 	BaseAPI = "/v2/"
 
@@ -16,6 +12,4 @@ const (
 	ManifestAPI = BaseAPI + "{image}/manifests/{reference}"
 
 	TagAPI = BaseAPI + "{image}/tags/list"
-
-	UserErrorResponse = http.StatusPaymentRequired
 )
