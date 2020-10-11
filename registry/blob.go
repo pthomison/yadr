@@ -14,7 +14,6 @@ type Blob struct {
 	contentType string
 	fileLocation string
 	urlLocation string
-	exists bool
 	image string
 }
 
@@ -27,26 +26,15 @@ type BlobUpload struct {
 	id string
 }
 
-
-
-type Digest string
-
-
-// takes in a digest, return a blob with all fields besides content, contentType, & upload location loaded
-func (r *Registry) BlobDigestInit(digest string, image string) (*Blob, error) {
+func (r *Registry) BlobInit(digest string) (*Blob, error) {
 	b := &Blob{
 		digest: digest,
-		image: image,
-		fileLocation: fmt.Sprintf("%v%v%v", r.StorageLocation, blobFolder, digest),
-		urlLocation: fmt.Sprintf("/v2/%s/blobs/%s", image, digest),
+		fileLocation: fmt.Sprintf("%v%v", r.BlobFolder, digest),
 	}
 
 	exists, _ := r.checkForBlob(digest)
 
-	b.exists = exists
-
-
-	if b.exists {
+	if exists {
 		f, err := os.Stat(b.fileLocation)
 		if err != nil {
 			return nil, err
@@ -57,27 +45,25 @@ func (r *Registry) BlobDigestInit(digest string, image string) (*Blob, error) {
 	return b, nil
 }
 
-
-func (r *Registry) BlobUploadInit(image string, uploadID string) (*BlobUpload, error) {
+func (r *Registry) BlobUploadInit(image string, id string) *BlobUpload {
 	b := &BlobUpload{
 		image: image,
-		id: uploadID,
-		fileLocation: r.StorageLocation + "/uploads/" + uploadID,
-		url: fmt.Sprintf("/v2/%s/blobs/uploads/%s", image, uploadID),
+		id: id,
+		fileLocation: r.UploadFolder + id,
+		url: fmt.Sprintf("/v2/%s/blobs/uploads/%s", image, id),
 	}
 
-	return b, nil
+	return b
 }
 
 
 func (r *Registry) ProcessUpload(u *BlobUpload)  (*Blob, error) {
-
 	digest, err := hashFile(u.fileLocation)
 	if err != nil {
 		return nil, err
 	}
 
-	b, err := r.BlobDigestInit(digest, u.image)
+	b, err := r.BlobInit(digest)
 	if err != nil {
 		return nil, err
 	}
@@ -87,13 +73,16 @@ func (r *Registry) ProcessUpload(u *BlobUpload)  (*Blob, error) {
 		return nil, err
 	}
 
+	r.blobs[b.digest] = b
+
 	return b, nil
 }
 
 
 func (b *BlobUpload) StoreUploadData(r io.Reader) error {
+	// If the file doesn't exist, create it, or append to the file
+	f, err := os.OpenFile(b.fileLocation, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
-	f, err := os.Create(b.fileLocation)
 	if err != nil {
 		return err
 	}
@@ -119,8 +108,16 @@ func (b *Blob) SendData(w io.Writer) error {
 
 	defer f.Close()
 
-
 	_, err = io.Copy(w, f)
 
 	return err
+}
+
+func (r *Registry) Delete(b *Blob) error {
+	err := os.Remove(b.fileLocation)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

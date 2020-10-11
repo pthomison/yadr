@@ -11,24 +11,15 @@ import(
 
 )
 
-func (r *Registry) RequireBlobDigest(fn func(w http.ResponseWriter, req *http.Request, b *Blob)) http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
-		vars := mux.Vars(req)
-		digest := vars["digest"]
-		image := vars["image"]
-
-		blob, err := r.BlobDigestInit(digest, image)
-		check(err)
-
-		fn(w, req, blob)
-	}
-}
-
-
-func (r *Registry) HeadBlob(w http.ResponseWriter, req *http.Request, b *Blob) {
+func (r *Registry) HeadBlob(w http.ResponseWriter, req *http.Request) {
 	fmt.Println("\n\n --- Blob Head Handler Called")
 
-	if b.exists {
+	vars := mux.Vars(req)
+	digest := vars["digest"]
+
+	b, exists := r.blobs[digest]
+
+	if exists {
 		w.Header().Set("Content-Length", fmt.Sprintf("%v", b.contentLength))
 		w.Header().Set("Docker-Content-Digest", b.digest)
 
@@ -38,11 +29,20 @@ func (r *Registry) HeadBlob(w http.ResponseWriter, req *http.Request, b *Blob) {
 	}
 }
 
-
-func (r *Registry) GetBlob(w http.ResponseWriter, req *http.Request, b *Blob) {
+func (r *Registry) GetBlob(w http.ResponseWriter, req *http.Request) {
 	fmt.Println("\n\n --- Blob Get Handler Called")
 
-	if b.exists {
+
+	vars := mux.Vars(req)
+	digest := vars["digest"]
+
+    fmt.Printf("%+v\n", r.blobs)
+    fmt.Printf("%+v\n", digest)
+
+
+	b, exists := r.blobs[digest]
+
+	if exists {
 		w.Header().Set("Content-Type", "application/vnd.docker.distribution.manifest.v2+json")
 		w.Header().Set("Content-Length", fmt.Sprintf("%v", b.contentLength))
 		w.Header().Set("Docker-Content-Digest", b.digest)
@@ -54,69 +54,125 @@ func (r *Registry) GetBlob(w http.ResponseWriter, req *http.Request, b *Blob) {
 
 
 	} else {
+		fmt.Println("\n\n --- Blob Not Found")
+
     	w.WriteHeader(http.StatusNotFound)
 	}
 }
 
-
-// always accept
-func (r *Registry) PostBlobUploadRequest(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("\n\n --- Blob Upload Request Post Handler")
-
-	id := uuid.New().String()
+func (r *Registry) DeleteBlob(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("\n\n --- Blob Delete Handler Called")
 
 	vars := mux.Vars(req)
-	image := vars["image"]
+	digest := vars["digest"]
 
-	w.Header().Set("Accept-Encoding", "gzip")
-	w.Header().Set("Content-Length", "0")
-	w.Header().Set("Range", "0-0")
+	b, exists := r.blobs[digest]
 
-	w.Header().Set("Location", fmt.Sprintf("/v2/%s/blobs/uploads/%s", image, id))
-	w.Header().Set("Docker-Upload-UUID", id)
-	w.WriteHeader(http.StatusAccepted)
+	if exists {
+		err := r.Delete(b)
+		check(err)
+
+		delete(r.blobs, b.digest)
+
+		w.WriteHeader(http.StatusAccepted)
+
+	} else {
+    	w.WriteHeader(http.StatusNotFound)
+	}
 }
 
-
-func (r *Registry) PatchBlobUpload(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("\n\n ----- Blob Upload Patch Handler")
-
-	id := filepath.Base(req.URL.Path)
+// end of all upload types
+func (r *Registry) CompleteBlobUpload(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("\n\n --- Complete Blob Upload")
 
 	vars := mux.Vars(req)
 	image := vars["image"]
+	var digest string 
+	var id string
 
-	b, err := r.BlobUploadInit(image, id)
-	check(err)
-
-	err = b.StoreUploadData(req.Body)
-	check(err)
-
-	fmt.Printf("%+v\n", b)
-
-
-    w.Header().Set("Location", b.url)
-    w.Header().Set("Range", fmt.Sprintf("0-%v", b.contentLength))
-	w.WriteHeader(http.StatusAccepted)
-}
+	if val, ok := vars["digest"]; ok {
+	    digest = val
+	} else {
+		id = uuid.New().String()
+		w.WriteHeader(http.StatusBadRequest)
+	}
 
 
-func (r *Registry) PostBlobUploadComplete(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("\n\n --- Blob Upload Complete Post Handler")
+	if val, ok := vars["sessionID"]; ok {
+	    id = val
+	} else {
+		id = uuid.New().String()
+	}
 
-	id := filepath.Base(req.URL.Path)
+	u := r.BlobUploadInit(image, id)
 
-	vars := mux.Vars(req)
-	image := vars["image"]
+	if req.Header.Get("Content-Length") != "0" {
+		err := u.StoreUploadData(req.Body)
+		check(err)
+	} 
 
-	u, err := r.BlobUploadInit(image, id)
-	check(err)
 
 	b, err := r.ProcessUpload(u)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		check(err)
+		return
 	}
 
-	w.Header().Set("Location", b.urlLocation)
+	if b.digest != digest {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Location", fmt.Sprintf("/v2/%s/blobs/%s", image, b.digest))
+    w.Header().Set("Range", fmt.Sprintf("0-%v", b.contentLength))
 	w.WriteHeader(http.StatusCreated)
+}
+
+
+// always accept
+func (r *Registry) RequestBlobUpload(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("\n\n --- Blob Upload Request")
+
+	vars := mux.Vars(req)
+	image := vars["image"]
+	id := uuid.New().String()
+
+	// start of upload, more requests coming
+	if req.Header.Get("Content-Length") == "0" {
+		w.Header().Set("Content-Length", "0")
+		w.Header().Set("Range", "0-0")
+
+		w.Header().Set("Location", fmt.Sprintf("/v2/%s/blobs/uploads/%s", image, id))
+		w.Header().Set("Docker-Upload-UUID", id)
+
+		w.WriteHeader(http.StatusAccepted)
+	} else {
+		w.WriteHeader(UserErrorResponse)
+	}
+}
+
+// chunked upload
+func (r *Registry) PatchBlobUpload(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("\n\n --- Blob Upload Patch Handler")
+
+	vars := mux.Vars(req)
+	image := vars["image"]
+
+	id := filepath.Base(req.URL.Path)
+
+	u := r.BlobUploadInit(image, id)
+
+	if req.Header.Get("Content-Length") != "0" {
+		u.StoreUploadData(req.Body)
+	} else {
+
+	}
+
+	err := u.StoreUploadData(req.Body)
+	check(err)
+
+    w.Header().Set("Location", u.url)
+    w.Header().Set("Range", fmt.Sprintf("0-%v", u.contentLength))
+	w.WriteHeader(http.StatusAccepted)
 }

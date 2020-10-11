@@ -48,3 +48,21 @@ pulltest:
 	docker rmi 127.0.0.1:5000/fedora:latest
 	docker pull 127.0.0.1:5000/fedora:latest
 	docker run 127.0.0.1:5000/fedora:latest bash -c "echo This Image Runs"
+
+compliance:
+	docker run \
+	-it \
+	--network host \
+	-e "OCI_ROOT_URL=http://127.0.0.1:5000" \
+	-e "OCI_NAMESPACE=fedora" \
+	-e "OCI_TEST_PULL=1" \
+	-e "OCI_TEST_PUSH=1" \
+	--name conform \
+	pthomison/oci-conformance-registry-tester:latest || true
+	docker cp conform:/report.html ./conformance-report.html
+	docker rm -f conform
+
+export 
+export OCI_NAMESPACE="myorg/myrepo"
+export OCI_USERNAME="myuser"
+export OCI_PASSWORD="mypass"

@@ -1,0 +1,2166 @@
+<html>
+  <head>
+    <title>OCI Distribution Conformance Tests</title>
+    <style>
+      body {
+        padding: 10px 20px 10px 20px;
+        font-family: -apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAG0lEQVQYV2Pce7zwv7NlPyMDFMAZGAIwlRgqAFydCAVv5m4UAAAAAElFTkSuQmCC") repeat;
+         
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        background-color: white;
+      }
+      th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      tr:hover {
+        background-color: #ffe39b;
+      }
+      .result {
+        padding: 1.25em 0 .25em 0.8em;
+        border: 1px solid #e1e1e1;
+        border-radius: 5px;
+        margin-top: 10px;
+      }
+      .red {
+        background: #ffc8c8;
+      }
+      pre.fail-message {
+        background: #f9a5a5;
+        padding: 20px;
+        margin-right: 10px;
+        display: inline-block;
+        border-radius: 4px;
+        font-size: 1.25em;
+        width: 94%;
+        overflow-x: auto;
+        max-width: 85%;
+      }
+      .green {
+        background: #c8ffc8;
+        padding: 1.25em 0 1.25em 0.8em;
+      }
+      .grey {
+        background: lightgrey;
+        padding: 1.25em 0 1.25em 0.8em;
+      }
+      .toggle {
+        border: 2px solid #3e3e3e;
+        cursor: pointer;
+        width: 1em;
+        text-align: center;
+        font-weight: bold;
+        display: inline;
+        font-family: monospace;
+        padding: 0 .25em 0 .25em;
+        margin: 1em 1em 1em 0;
+        font-size: 12pt;
+        color: #3e3e3e;
+        border-radius: 3px;
+      }
+      pre.pre-box {
+        background: #343a40;
+        color: #fff;
+        padding: 10px;
+        border: 1px solid gray;
+        display: inline-block;
+        border-radius: 4px;
+        width: 97%;
+        font-size: 1.25em;
+        overflow-x: auto;
+        max-height: 60em;
+        overflow-y: auto;
+        max-width: 85%;
+      }
+      .summary {
+        width: 100%;
+        height: auto;
+        padding: 0 0 .5em 0;
+        border-radius: 6px;
+        border: 1px solid #cccddd;
+        background: white;
+      }
+      .summary-bullet {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
+        padding: .5em .1em .1em .5em;
+      }
+      .bullet-left {
+        width: 25%;
+        font-weight: bold;
+        font-size: 100%;
+      }
+      .bullet-right {
+        width: auto;
+        font-family: monospace;
+        font-size: 110%;
+      }
+      .quick-summary {
+        width: 70%;
+        display: flex;
+        margin: 0 auto 0 0;
+        font-weight: bold;
+        font-size: 1.2em;
+      }
+      .darkgreen {
+        color: green;
+      }
+      .darkred {
+        color: red;
+        padding: 0 0 0 2em;
+      }
+      .darkgrey {
+        color: grey;
+        padding: 0 0 0 2em;
+      }
+      .meter {
+        border: 1px solid black;
+        margin: 0 .5em 0 auto;
+        display: flex;
+        height: 25px;
+        width: 45%;
+      }
+      @media only screen and (max-width: 600px) {
+        .meter {
+          display: none;
+        }
+      }
+      .meter-green {
+        height: 100%;
+        background: green;
+        width: 57%;
+      }
+      .meter-red {
+        height: 100%;
+        background: red;
+        width: 4%;
+      }
+      .meter-grey {
+        height: 100%;
+        background: grey;
+        width: 39%;
+      }
+      .subcategory {
+        background: white;
+        padding: 0px 20px 20px 20px;
+        border: 1px solid #cccddd;
+        border-radius: 6px;
+      }
+      h2 {
+        margin-top: 45px;
+      }
+      h4 {
+        vertical-align: bottom;
+        cursor: pointer;
+      }
+    </style>
+    <script>
+      function toggleOutput(id) {
+        var elem = document.getElementById(id);
+        var button = document.getElementById(id + "-button");
+        if (elem.style['display'] === 'block') {
+          button.innerHTML = "+";
+          elem.style['display'] = 'none';
+        } else {
+          button.innerHTML = "-";
+          elem.style['display'] = 'block';
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h1>OCI Distribution Conformance Tests</h1>
+    <table>
+      <tr>
+      </tr>
+      <tr>
+        <td class="bullet-left">Summary</td>
+        <td>
+          <div class="quick-summary"><span class="darkgreen">31 passed</span><span class="darkred">2 failed</span><span class="darkgrey">21 skipped</span><div class="meter">
+              <div class="meter-green"></div>
+              <div class="meter-red"></div>
+              <div class="meter-grey"></div>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="bullet-left">Start Time</td>
+        <td>Oct 10 23:59:54.666 &#43;0000 UTC</td>
+      </tr>
+      <tr>
+        <td class="bullet-left">End Time</td>
+        <td>Oct 10 23:59:54.913 &#43;0000 UTC</td>
+      </tr>
+      <tr>
+        <td class="bullet-left">Time Elapsed</td>
+        <td>247.213906ms</td>
+      </tr>
+      <tr>
+        <td class="bullet-left">Test Version</td>
+        <td>unknown</td>
+      </tr>
+      <tr>
+        <td class="bullet-left">Configuration</td>
+        <td><div class="bullet-right">
+          
+            OCI_ROOT_URL=http://127.0.0.1:5000<br />
+          
+            OCI_NAMESPACE=fedora<br />
+          
+            OCI_TEST_PULL=1<br />
+          
+            OCI_TEST_PUSH=1<br />
+          
+        </div></td>
+      </tr>
+    </table>
+
+    <div>
+      
+        
+        
+          
+          
+            
+              <h2>Pull</h2>
+              <div class="subcategory">
+              
+              
+                <h3>Setup</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-0-button" class="toggle" onclick="javascript:toggleOutput('output-box-0')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-0')">Populate registry with test blob</h4>
+                        <br>
+                        <div id="output-box-0" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.667923 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+POST  /v2/fedora/blobs/uploads/  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.667492951Z
+TIME DURATION: 1.14946ms
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Upload-Uuid: 70114089-ea4c-4e46-9227-a67b1c7357df
+	Location: /v2/fedora/blobs/uploads/70114089-ea4c-4e46-9227-a67b1c7357df
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+2020/10/10 23:59:54.669194 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PUT  /v2/fedora/blobs/uploads/70114089-ea4c-4e46-9227-a67b1c7357df?digest=sha256%3A66ad98165d38f53ee73868f82bd4eed60556ddfee824810a4062c4f777b20a5b  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Content-Length: 113
+	Content-Type: application/octet-stream
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+ewoJImFyY2hpdGVjdHVyZSI6ICJhbWQ2NCIsCgkib3MiOiAibGludXgiLAoJImNvbmZpZyI6IHt9LAoJInJvb3RmcyI6IHsKCQkidHlwZSI6ICJsYXllcnMiLAoJCSJkaWZmX2lkcyI6IFtdCgl9Cn0=
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 201 Created
+RECEIVED AT  : 2020-10-10T23:59:54.668714247Z
+TIME DURATION: 669.479µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Location: /v2/fedora/blobs/sha256:66ad98165d38f53ee73868f82bd4eed60556ddfee824810a4062c4f777b20a5b
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-1-button" class="toggle" onclick="javascript:toggleOutput('output-box-1')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-1')">Populate registry with test layer</h4>
+                        <br>
+                        <div id="output-box-1" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.669852 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+POST  /v2/fedora/blobs/uploads/  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.669568933Z
+TIME DURATION: 283.393µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Upload-Uuid: 05d62356-a2a5-47e9-8d2d-34966b2f528f
+	Location: /v2/fedora/blobs/uploads/05d62356-a2a5-47e9-8d2d-34966b2f528f
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+2020/10/10 23:59:54.670773 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PUT  /v2/fedora/blobs/uploads/05d62356-a2a5-47e9-8d2d-34966b2f528f?digest=sha256%3A48acff1d91752e957527c1b5416e7376d910bcacf01b9441175f8c270e35c183  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Content-Length: 168
+	Content-Type: application/octet-stream
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+H4sIAAAAAAAAA&#43;3OQQrCMBCF4a49xXgBSUnaHMCTRBptQRNpp6i3t0UEV7oqIv7fYgbmzeJpHHSjVy0WZCa1c/MufWVe94N3RWlrZ72x3k/30nhbFWKWLPU0Dhp6keJ8im//PuU/6pZH2WVtYx8b0Sz7LjWSR5VLG6YRBumSzOlGtjkd&#43;qDjMWiX07Befbs7AAAAAAAAAAAAAAAAAPyzO34MnqoAKAAA
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 201 Created
+RECEIVED AT  : 2020-10-10T23:59:54.670318642Z
+TIME DURATION: 381.627µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Location: /v2/fedora/blobs/sha256:48acff1d91752e957527c1b5416e7376d910bcacf01b9441175f8c270e35c183
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-2-button" class="toggle" onclick="javascript:toggleOutput('output-box-2')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-2')">Populate registry with test manifest</h4>
+                        <br>
+                        <div id="output-box-2" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.672283 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PUT  /v2/fedora/manifests/tagtest0  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Accept: application/vnd.oci.image.manifest.v1&#43;json
+	Content-Type: application/vnd.oci.image.manifest.v1&#43;json
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+&#34;ewoJInNjaGVtYVZlcnNpb24iOiAyLAoJImNvbmZpZyI6IHsKCQkibWVkaWFUeXBlIjogImFwcGxpY2F0aW9uL3ZuZC5vY2kuaW1hZ2UuY29uZmlnLnYxK2pzb24iLAoJCSJkaWdlc3QiOiAic2hhMjU2OjY2YWQ5ODE2NWQzOGY1M2VlNzM4NjhmODJiZDRlZWQ2MDU1NmRkZmVlODI0ODEwYTQwNjJjNGY3NzdiMjBhNWIiLAoJCSJzaXplIjogMTEzCgl9LAoJImxheWVycyI6IFsKCQl7CgkJCSJtZWRpYVR5cGUiOiAiYXBwbGljYXRpb24vdm5kLm9jaS5pbWFnZS5sYXllci52MS50YXIrZ3ppcCIsCgkJCSJkaWdlc3QiOiAic2hhMjU2OjQ4YWNmZjFkOTE3NTJlOTU3NTI3YzFiNTQxNmU3Mzc2ZDkxMGJjYWNmMDFiOTQ0MTE3NWY4YzI3MGUzNWMxODMiLAoJCQkic2l6ZSI6IDE2OAoJCX0KCV0KfQ==&#34;
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 201 Created
+RECEIVED AT  : 2020-10-10T23:59:54.671446031Z
+TIME DURATION: 542.871µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Content-Digest: sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556
+	Location: /v2/&amp;{map[sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556})] map[tagtest0:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556})] /hacking/data/manifests/fedora /hacking/data/manifests/fedora/index/ /hacking/data/manifests/fedora/tags/ fedora}/manifests/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-3-button" class="toggle" onclick="javascript:toggleOutput('output-box-3')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-3')">Get the name of a tag</h4>
+                        <br>
+                        <div id="output-box-3" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.672881 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+GET  /v2/fedora/tags/list  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 200 OK
+RECEIVED AT  : 2020-10-10T23:59:54.672535839Z
+TIME DURATION: 196.029µs
+HEADERS      :
+	Content-Length: 37
+	Content-Type: text/plain; charset=utf-8
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+BODY         :
+{&#34;Name&#34;:&#34;fedora&#34;,&#34;Tags&#34;:[&#34;tagtest0&#34;]}
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-4-button" class="toggle" onclick="javascript:toggleOutput('output-box-4')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-4')">Get tag name from environment</h4>
+                        <br>
+                        <div id="output-box-4" style="display: none;">
+                          <pre class="pre-box">you have skipped this test.</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+                <h3>Pull blobs</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-5-button" class="toggle" onclick="javascript:toggleOutput('output-box-5')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-5')">GET nonexistent blob should result in 404 response</h4>
+                        <br>
+                        <div id="output-box-5" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.674019 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+GET  /v2/fedora/blobs/sha256:b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 404 Not Found
+RECEIVED AT  : 2020-10-10T23:59:54.673788263Z
+TIME DURATION: 314.972µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-6-button" class="toggle" onclick="javascript:toggleOutput('output-box-6')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-6')">GET request to existing blob URL should yield 200</h4>
+                        <br>
+                        <div id="output-box-6" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.674619 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+GET  /v2/fedora/blobs/sha256:66ad98165d38f53ee73868f82bd4eed60556ddfee824810a4062c4f777b20a5b  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 200 OK
+RECEIVED AT  : 2020-10-10T23:59:54.674275719Z
+TIME DURATION: 194.656µs
+HEADERS      :
+	Content-Length: 0
+	Content-Type: application/vnd.docker.distribution.manifest.v2&#43;json
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Content-Digest: sha256:66ad98165d38f53ee73868f82bd4eed60556ddfee824810a4062c4f777b20a5b
+BODY         :
+*** Error: Unable to format response body - &#34;unexpected end of JSON input&#34; ***
+
+Log Body as-is:
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+                <h3>Pull manifests</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-7-button" class="toggle" onclick="javascript:toggleOutput('output-box-7')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-7')">GET nonexistent manifest should return 404</h4>
+                        <br>
+                        <div id="output-box-7" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.675488 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+GET  /v2/fedora/manifests/.INVALID_MANIFEST_NAME  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 404 Not Found
+RECEIVED AT  : 2020-10-10T23:59:54.675184317Z
+TIME DURATION: 503.317µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-8-button" class="toggle" onclick="javascript:toggleOutput('output-box-8')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-8')">GET request to manifest path (digest) should yield 200 response</h4>
+                        <br>
+                        <div id="output-box-8" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.676119 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+GET  /v2/fedora/manifests/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Accept: application/vnd.oci.image.manifest.v1&#43;json
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 200 OK
+RECEIVED AT  : 2020-10-10T23:59:54.675864806Z
+TIME DURATION: 257.835µs
+HEADERS      :
+	Content-Type: application/vnd.docker.distribution.manifest.v2&#43;json
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Content-Digest: sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556
+BODY         :
+*** Error: Unable to format response body - &#34;unexpected end of JSON input&#34; ***
+
+Log Body as-is:
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-9-button" class="toggle" onclick="javascript:toggleOutput('output-box-9')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-9')">GET request to manifest path (tag) should yield 200 response</h4>
+                        <br>
+                        <div id="output-box-9" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.677484 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+GET  /v2/fedora/manifests/tagtest0  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Accept: application/vnd.oci.image.manifest.v1&#43;json
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 200 OK
+RECEIVED AT  : 2020-10-10T23:59:54.677162434Z
+TIME DURATION: 248.166µs
+HEADERS      :
+	Content-Type: application/vnd.docker.distribution.manifest.v2&#43;json
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Content-Digest: sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556
+BODY         :
+*** Error: Unable to format response body - &#34;unexpected end of JSON input&#34; ***
+
+Log Body as-is:
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+                <h3>Error codes</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result red">
+                        <div id="output-box-10-button" class="toggle" onclick="javascript:toggleOutput('output-box-10')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-10')">400 response body should contain OCI-conforming JSON message</h4>
+                        <br>
+                        <div>
+                          <div id="output-box-10" style="display: none;">
+                            <pre class="pre-box">2020/10/10 23:59:54.678609 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PUT  /v2/fedora/manifests/sha256:totallywrong  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Accept: application/vnd.oci.image.manifest.v1&#43;json
+	Content-Type: application/vnd.oci.image.manifest.v1&#43;json
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+&#34;YmxhYmxhYmxh&#34;
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 201 Created
+RECEIVED AT  : 2020-10-10T23:59:54.677981243Z
+TIME DURATION: 400.392µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Content-Digest: sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d
+	Location: /v2/&amp;{map[sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d}) sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556})] map[tagtest0:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556})] /hacking/data/manifests/fedora /hacking/data/manifests/fedora/index/ /hacking/data/manifests/fedora/tags/ fedora}/manifests/sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d
+BODY         :
+
+==============================================================================
+
+</pre>
+                          </div>
+                        </div>
+                        <pre class="fail-message">Expected
+    &lt;int&gt;: 201
+To satisfy at least one of these matchers: [%!s(*matchers.EqualMatcher=&amp;{400}) %!s(*matchers.EqualMatcher=&amp;{404})]</pre>
+                        <br>
+                      </div>
+                    
+                  <br>
+                
+              
+                <h3>Teardown</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-11-button" class="toggle" onclick="javascript:toggleOutput('output-box-11')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-11')">Delete config blob created in setup</h4>
+                        <br>
+                        <div id="output-box-11" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.679985 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+DELETE  /v2/fedora/blobs/sha256:66ad98165d38f53ee73868f82bd4eed60556ddfee824810a4062c4f777b20a5b  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.679639419Z
+TIME DURATION: 565.904µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-12-button" class="toggle" onclick="javascript:toggleOutput('output-box-12')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-12')">Delete layer blob created in setup</h4>
+                        <br>
+                        <div id="output-box-12" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.680711 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+DELETE  /v2/fedora/blobs/sha256:48acff1d91752e957527c1b5416e7376d910bcacf01b9441175f8c270e35c183  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.68046448Z
+TIME DURATION: 361.199µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-13-button" class="toggle" onclick="javascript:toggleOutput('output-box-13')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-13')">Delete manifest created in setup</h4>
+                        <br>
+                        <div id="output-box-13" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.681304 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+DELETE  /v2/fedora/manifests/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.681043578Z
+TIME DURATION: 268.905µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+            
+          
+        </div>
+        
+          
+          
+            
+              <h2>Push</h2>
+              <div class="subcategory">
+              
+              
+                <h3>Blob Upload Streamed</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-14-button" class="toggle" onclick="javascript:toggleOutput('output-box-14')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-14')">PATCH request with blob in body should yield 202 response</h4>
+                        <br>
+                        <div id="output-box-14" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.681937 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+POST  /v2/fedora/blobs/uploads/  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.681660117Z
+TIME DURATION: 264.537µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Upload-Uuid: 259597e7-4987-4788-8d4f-19e17a2e03cd
+	Location: /v2/fedora/blobs/uploads/259597e7-4987-4788-8d4f-19e17a2e03cd
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+2020/10/10 23:59:54.682829 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PATCH  /v2/fedora/blobs/uploads/259597e7-4987-4788-8d4f-19e17a2e03cd  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Content-Type: application/octet-stream
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+TkJBIEphbSBvbiBteSBOQkEgdG9hc3Q=
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.682406259Z
+TIME DURATION: 409.008µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Location: /v2/fedora/blobs/uploads/259597e7-4987-4788-8d4f-19e17a2e03cd
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-15-button" class="toggle" onclick="javascript:toggleOutput('output-box-15')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-15')">PUT request to session URL with digest should yield 201 response</h4>
+                        <br>
+                        <div id="output-box-15" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.683672 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PUT  /v2/fedora/blobs/uploads/259597e7-4987-4788-8d4f-19e17a2e03cd?digest=sha256%3A852411eaf653ebebfa34b688ad1736c9da4decadb8f55b839b550d64eaad3f75  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Content-Length: 23
+	Content-Type: application/octet-stream
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 201 Created
+RECEIVED AT  : 2020-10-10T23:59:54.683319015Z
+TIME DURATION: 380.165µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Location: /v2/fedora/blobs/sha256:852411eaf653ebebfa34b688ad1736c9da4decadb8f55b839b550d64eaad3f75
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+                <h3>Blob Upload Monolithic</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-16-button" class="toggle" onclick="javascript:toggleOutput('output-box-16')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-16')">GET nonexistent blob should result in 404 response</h4>
+                        <br>
+                        <div id="output-box-16" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.684291 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+GET  /v2/fedora/blobs/sha256:b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 404 Not Found
+RECEIVED AT  : 2020-10-10T23:59:54.684030131Z
+TIME DURATION: 265.008µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-17-button" class="toggle" onclick="javascript:toggleOutput('output-box-17')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-17')">POST request with digest and blob should yield a 201</h4>
+                        <br>
+                        <div id="output-box-17" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.685262 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+POST  /v2/fedora/blobs/uploads/?digest=sha256%3A66ad98165d38f53ee73868f82bd4eed60556ddfee824810a4062c4f777b20a5b  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Content-Length: 113
+	Content-Type: application/octet-stream
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+ewoJImFyY2hpdGVjdHVyZSI6ICJhbWQ2NCIsCgkib3MiOiAibGludXgiLAoJImNvbmZpZyI6IHt9LAoJInJvb3RmcyI6IHsKCQkidHlwZSI6ICJsYXllcnMiLAoJCSJkaWZmX2lkcyI6IFtdCgl9Cn0=
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 201 Created
+RECEIVED AT  : 2020-10-10T23:59:54.68477426Z
+TIME DURATION: 393.85µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Location: /v2/fedora/blobs/sha256:66ad98165d38f53ee73868f82bd4eed60556ddfee824810a4062c4f777b20a5b
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-18-button" class="toggle" onclick="javascript:toggleOutput('output-box-18')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-18')">GET request to blob URL from prior request should yield 200</h4>
+                        <br>
+                        <div id="output-box-18" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.686109 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+GET  /v2/fedora/blobs/sha256:66ad98165d38f53ee73868f82bd4eed60556ddfee824810a4062c4f777b20a5b  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 200 OK
+RECEIVED AT  : 2020-10-10T23:59:54.685730898Z
+TIME DURATION: 379.574µs
+HEADERS      :
+	Content-Length: 0
+	Content-Type: application/vnd.docker.distribution.manifest.v2&#43;json
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Content-Digest: sha256:66ad98165d38f53ee73868f82bd4eed60556ddfee824810a4062c4f777b20a5b
+BODY         :
+*** Error: Unable to format response body - &#34;unexpected end of JSON input&#34; ***
+
+Log Body as-is:
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-19-button" class="toggle" onclick="javascript:toggleOutput('output-box-19')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-19')">POST request should yield a session ID</h4>
+                        <br>
+                        <div id="output-box-19" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.686854 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+POST  /v2/fedora/blobs/uploads/  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.686675032Z
+TIME DURATION: 508.355µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Upload-Uuid: 40de1b26-6520-45a6-adff-a122eccad451
+	Location: /v2/fedora/blobs/uploads/40de1b26-6520-45a6-adff-a122eccad451
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-20-button" class="toggle" onclick="javascript:toggleOutput('output-box-20')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-20')">PUT upload of a blob should yield a 201 Response</h4>
+                        <br>
+                        <div id="output-box-20" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.687723 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PUT  /v2/fedora/blobs/uploads/40de1b26-6520-45a6-adff-a122eccad451?digest=sha256%3A66ad98165d38f53ee73868f82bd4eed60556ddfee824810a4062c4f777b20a5b  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Content-Length: 113
+	Content-Type: application/octet-stream
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+ewoJImFyY2hpdGVjdHVyZSI6ICJhbWQ2NCIsCgkib3MiOiAibGludXgiLAoJImNvbmZpZyI6IHt9LAoJInJvb3RmcyI6IHsKCQkidHlwZSI6ICJsYXllcnMiLAoJCSJkaWZmX2lkcyI6IFtdCgl9Cn0=
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 201 Created
+RECEIVED AT  : 2020-10-10T23:59:54.687400215Z
+TIME DURATION: 477.798µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Location: /v2/fedora/blobs/sha256:66ad98165d38f53ee73868f82bd4eed60556ddfee824810a4062c4f777b20a5b
+	Range: 0-113
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-21-button" class="toggle" onclick="javascript:toggleOutput('output-box-21')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-21')">GET request to existing blob should yield 200 response</h4>
+                        <br>
+                        <div id="output-box-21" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.891058 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+GET  /v2/fedora/blobs/sha256:66ad98165d38f53ee73868f82bd4eed60556ddfee824810a4062c4f777b20a5b  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 200 OK
+RECEIVED AT  : 2020-10-10T23:59:54.687949076Z
+TIME DURATION: 172.043µs
+HEADERS      :
+	Content-Length: 113
+	Content-Type: application/vnd.docker.distribution.manifest.v2&#43;json
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Content-Digest: sha256:66ad98165d38f53ee73868f82bd4eed60556ddfee824810a4062c4f777b20a5b
+BODY         :
+{
+   &#34;architecture&#34;: &#34;amd64&#34;,
+   &#34;os&#34;: &#34;linux&#34;,
+   &#34;config&#34;: {},
+   &#34;rootfs&#34;: {
+      &#34;type&#34;: &#34;layers&#34;,
+      &#34;diff_ids&#34;: []
+   }
+}
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-22-button" class="toggle" onclick="javascript:toggleOutput('output-box-22')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-22')">PUT upload of a layer blob should yield a 201 Response</h4>
+                        <br>
+                        <div id="output-box-22" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.891845 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+POST  /v2/fedora/blobs/uploads/  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.891471359Z
+TIME DURATION: 327.235µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Upload-Uuid: 32719774-957d-4588-91ae-702bf51595ce
+	Location: /v2/fedora/blobs/uploads/32719774-957d-4588-91ae-702bf51595ce
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+2020/10/10 23:59:54.892965 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PUT  /v2/fedora/blobs/uploads/32719774-957d-4588-91ae-702bf51595ce?digest=sha256%3A48acff1d91752e957527c1b5416e7376d910bcacf01b9441175f8c270e35c183  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Content-Length: 168
+	Content-Type: application/octet-stream
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+H4sIAAAAAAAAA&#43;3OQQrCMBCF4a49xXgBSUnaHMCTRBptQRNpp6i3t0UEV7oqIv7fYgbmzeJpHHSjVy0WZCa1c/MufWVe94N3RWlrZ72x3k/30nhbFWKWLPU0Dhp6keJ8im//PuU/6pZH2WVtYx8b0Sz7LjWSR5VLG6YRBumSzOlGtjkd&#43;qDjMWiX07Befbs7AAAAAAAAAAAAAAAAAPyzO34MnqoAKAAA
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 201 Created
+RECEIVED AT  : 2020-10-10T23:59:54.892505723Z
+TIME DURATION: 577.686µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Location: /v2/fedora/blobs/sha256:48acff1d91752e957527c1b5416e7376d910bcacf01b9441175f8c270e35c183
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-23-button" class="toggle" onclick="javascript:toggleOutput('output-box-23')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-23')">GET request to existing layer should yield 200 response</h4>
+                        <br>
+                        <div id="output-box-23" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.893791 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+GET  /v2/fedora/blobs/sha256:48acff1d91752e957527c1b5416e7376d910bcacf01b9441175f8c270e35c183  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 200 OK
+RECEIVED AT  : 2020-10-10T23:59:54.893447253Z
+TIME DURATION: 402.026µs
+HEADERS      :
+	Content-Length: 0
+	Content-Type: application/vnd.docker.distribution.manifest.v2&#43;json
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Content-Digest: sha256:48acff1d91752e957527c1b5416e7376d910bcacf01b9441175f8c270e35c183
+BODY         :
+*** Error: Unable to format response body - &#34;unexpected end of JSON input&#34; ***
+
+Log Body as-is:
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+                <h3>Blob Upload Chunked</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result red">
+                        <div id="output-box-24-button" class="toggle" onclick="javascript:toggleOutput('output-box-24')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-24')">Out-of-order blob upload should return 416</h4>
+                        <br>
+                        <div>
+                          <div id="output-box-24" style="display: none;">
+                            <pre class="pre-box">2020/10/10 23:59:54.894723 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+POST  /v2/fedora/blobs/uploads/  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Content-Length: 0
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.894366751Z
+TIME DURATION: 513.064µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Upload-Uuid: 1b83391f-e058-43d2-b563-704196852086
+	Location: /v2/fedora/blobs/uploads/1b83391f-e058-43d2-b563-704196852086
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+2020/10/10 23:59:54.895445 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PATCH  /v2/fedora/blobs/uploads/1b83391f-e058-43d2-b563-704196852086  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Content-Length: 22
+	Content-Range: 3-24
+	Content-Type: application/octet-stream
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+bG8sIGhvdyBhcmUgeW91IHRvZGF5Pw==
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.895181001Z
+TIME DURATION: 378.842µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Location: /v2/fedora/blobs/uploads/1b83391f-e058-43d2-b563-704196852086
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+</pre>
+                          </div>
+                        </div>
+                        <pre class="fail-message">Expected
+    &lt;int&gt;: 202
+to equal
+    &lt;int&gt;: 416</pre>
+                        <br>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-25-button" class="toggle" onclick="javascript:toggleOutput('output-box-25')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-25')">PATCH request with first chunk should return 202</h4>
+                        <br>
+                        <div id="output-box-25" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.896388 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+POST  /v2/fedora/blobs/uploads/  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Content-Length: 0
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.896121198Z
+TIME DURATION: 264.026µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Upload-Uuid: ec1f5c34-e237-4cb9-8641-7e9c9b97a5be
+	Location: /v2/fedora/blobs/uploads/ec1f5c34-e237-4cb9-8641-7e9c9b97a5be
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+2020/10/10 23:59:54.897072 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PATCH  /v2/fedora/blobs/uploads/ec1f5c34-e237-4cb9-8641-7e9c9b97a5be  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Content-Length: 3
+	Content-Range: 0-2
+	Content-Type: application/octet-stream
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+SGVs
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.896805905Z
+TIME DURATION: 357.041µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Location: /v2/fedora/blobs/uploads/ec1f5c34-e237-4cb9-8641-7e9c9b97a5be
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-26-button" class="toggle" onclick="javascript:toggleOutput('output-box-26')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-26')">PUT request with final chunk should return 201</h4>
+                        <br>
+                        <div id="output-box-26" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.897860 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PUT  /v2/fedora/blobs/uploads/ec1f5c34-e237-4cb9-8641-7e9c9b97a5be?digest=sha256%3A6e766a49e512e0ba0bc935e2aacd3e5a4a34add17f83afc4c9e669c70241cd48  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Content-Length: 22
+	Content-Range: 3-24
+	Content-Type: application/octet-stream
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+bG8sIGhvdyBhcmUgeW91IHRvZGF5Pw==
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 201 Created
+RECEIVED AT  : 2020-10-10T23:59:54.897547038Z
+TIME DURATION: 394.141µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Location: /v2/fedora/blobs/sha256:6e766a49e512e0ba0bc935e2aacd3e5a4a34add17f83afc4c9e669c70241cd48
+	Range: 0-0
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+                <h3>Manifest Upload</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-27-button" class="toggle" onclick="javascript:toggleOutput('output-box-27')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-27')">GET nonexistent manifest should return 404</h4>
+                        <br>
+                        <div id="output-box-27" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.898337 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+GET  /v2/fedora/manifests/.INVALID_MANIFEST_NAME  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 404 Not Found
+RECEIVED AT  : 2020-10-10T23:59:54.898121708Z
+TIME DURATION: 199.415µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-28-button" class="toggle" onclick="javascript:toggleOutput('output-box-28')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-28')">PUT should accept a manifest upload</h4>
+                        <br>
+                        <div id="output-box-28" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.899681 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PUT  /v2/fedora/manifests/test0  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Accept: application/vnd.oci.image.manifest.v1&#43;json
+	Content-Type: application/vnd.oci.image.manifest.v1&#43;json
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+&#34;ewoJInNjaGVtYVZlcnNpb24iOiAyLAoJImNvbmZpZyI6IHsKCQkibWVkaWFUeXBlIjogImFwcGxpY2F0aW9uL3ZuZC5vY2kuaW1hZ2UuY29uZmlnLnYxK2pzb24iLAoJCSJkaWdlc3QiOiAic2hhMjU2OjY2YWQ5ODE2NWQzOGY1M2VlNzM4NjhmODJiZDRlZWQ2MDU1NmRkZmVlODI0ODEwYTQwNjJjNGY3NzdiMjBhNWIiLAoJCSJzaXplIjogMTEzCgl9LAoJImxheWVycyI6IFsKCQl7CgkJCSJtZWRpYVR5cGUiOiAiYXBwbGljYXRpb24vdm5kLm9jaS5pbWFnZS5sYXllci52MS50YXIrZ3ppcCIsCgkJCSJkaWdlc3QiOiAic2hhMjU2OjQ4YWNmZjFkOTE3NTJlOTU3NTI3YzFiNTQxNmU3Mzc2ZDkxMGJjYWNmMDFiOTQ0MTE3NWY4YzI3MGUzNWMxODMiLAoJCQkic2l6ZSI6IDE2OAoJCX0KCV0KfQ==&#34;
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 201 Created
+RECEIVED AT  : 2020-10-10T23:59:54.898736573Z
+TIME DURATION: 318.168µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Content-Digest: sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556
+	Location: /v2/&amp;{map[sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d}) sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556})] map[tagtest0:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) test0:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556})] /hacking/data/manifests/fedora /hacking/data/manifests/fedora/index/ /hacking/data/manifests/fedora/tags/ fedora}/manifests/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556
+BODY         :
+
+==============================================================================
+
+2020/10/10 23:59:54.900825 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PUT  /v2/fedora/manifests/test1  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Accept: application/vnd.oci.image.manifest.v1&#43;json
+	Content-Type: application/vnd.oci.image.manifest.v1&#43;json
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+&#34;ewoJInNjaGVtYVZlcnNpb24iOiAyLAoJImNvbmZpZyI6IHsKCQkibWVkaWFUeXBlIjogImFwcGxpY2F0aW9uL3ZuZC5vY2kuaW1hZ2UuY29uZmlnLnYxK2pzb24iLAoJCSJkaWdlc3QiOiAic2hhMjU2OjY2YWQ5ODE2NWQzOGY1M2VlNzM4NjhmODJiZDRlZWQ2MDU1NmRkZmVlODI0ODEwYTQwNjJjNGY3NzdiMjBhNWIiLAoJCSJzaXplIjogMTEzCgl9LAoJImxheWVycyI6IFsKCQl7CgkJCSJtZWRpYVR5cGUiOiAiYXBwbGljYXRpb24vdm5kLm9jaS5pbWFnZS5sYXllci52MS50YXIrZ3ppcCIsCgkJCSJkaWdlc3QiOiAic2hhMjU2OjQ4YWNmZjFkOTE3NTJlOTU3NTI3YzFiNTQxNmU3Mzc2ZDkxMGJjYWNmMDFiOTQ0MTE3NWY4YzI3MGUzNWMxODMiLAoJCQkic2l6ZSI6IDE2OAoJCX0KCV0KfQ==&#34;
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 201 Created
+RECEIVED AT  : 2020-10-10T23:59:54.900020636Z
+TIME DURATION: 261.401µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Content-Digest: sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556
+	Location: /v2/&amp;{map[sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d}) sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556})] map[tagtest0:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) test0:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) test1:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556})] /hacking/data/manifests/fedora /hacking/data/manifests/fedora/index/ /hacking/data/manifests/fedora/tags/ fedora}/manifests/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556
+BODY         :
+
+==============================================================================
+
+2020/10/10 23:59:54.902035 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PUT  /v2/fedora/manifests/test2  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Accept: application/vnd.oci.image.manifest.v1&#43;json
+	Content-Type: application/vnd.oci.image.manifest.v1&#43;json
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+&#34;ewoJInNjaGVtYVZlcnNpb24iOiAyLAoJImNvbmZpZyI6IHsKCQkibWVkaWFUeXBlIjogImFwcGxpY2F0aW9uL3ZuZC5vY2kuaW1hZ2UuY29uZmlnLnYxK2pzb24iLAoJCSJkaWdlc3QiOiAic2hhMjU2OjY2YWQ5ODE2NWQzOGY1M2VlNzM4NjhmODJiZDRlZWQ2MDU1NmRkZmVlODI0ODEwYTQwNjJjNGY3NzdiMjBhNWIiLAoJCSJzaXplIjogMTEzCgl9LAoJImxheWVycyI6IFsKCQl7CgkJCSJtZWRpYVR5cGUiOiAiYXBwbGljYXRpb24vdm5kLm9jaS5pbWFnZS5sYXllci52MS50YXIrZ3ppcCIsCgkJCSJkaWdlc3QiOiAic2hhMjU2OjQ4YWNmZjFkOTE3NTJlOTU3NTI3YzFiNTQxNmU3Mzc2ZDkxMGJjYWNmMDFiOTQ0MTE3NWY4YzI3MGUzNWMxODMiLAoJCQkic2l6ZSI6IDE2OAoJCX0KCV0KfQ==&#34;
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 201 Created
+RECEIVED AT  : 2020-10-10T23:59:54.901186407Z
+TIME DURATION: 301.095µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Content-Digest: sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556
+	Location: /v2/&amp;{map[sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d}) sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556})] map[tagtest0:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) test0:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) test1:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) test2:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556})] /hacking/data/manifests/fedora /hacking/data/manifests/fedora/index/ /hacking/data/manifests/fedora/tags/ fedora}/manifests/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556
+BODY         :
+
+==============================================================================
+
+2020/10/10 23:59:54.903502 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PUT  /v2/fedora/manifests/test3  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Accept: application/vnd.oci.image.manifest.v1&#43;json
+	Content-Type: application/vnd.oci.image.manifest.v1&#43;json
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+&#34;ewoJInNjaGVtYVZlcnNpb24iOiAyLAoJImNvbmZpZyI6IHsKCQkibWVkaWFUeXBlIjogImFwcGxpY2F0aW9uL3ZuZC5vY2kuaW1hZ2UuY29uZmlnLnYxK2pzb24iLAoJCSJkaWdlc3QiOiAic2hhMjU2OjY2YWQ5ODE2NWQzOGY1M2VlNzM4NjhmODJiZDRlZWQ2MDU1NmRkZmVlODI0ODEwYTQwNjJjNGY3NzdiMjBhNWIiLAoJCSJzaXplIjogMTEzCgl9LAoJImxheWVycyI6IFsKCQl7CgkJCSJtZWRpYVR5cGUiOiAiYXBwbGljYXRpb24vdm5kLm9jaS5pbWFnZS5sYXllci52MS50YXIrZ3ppcCIsCgkJCSJkaWdlc3QiOiAic2hhMjU2OjQ4YWNmZjFkOTE3NTJlOTU3NTI3YzFiNTQxNmU3Mzc2ZDkxMGJjYWNmMDFiOTQ0MTE3NWY4YzI3MGUzNWMxODMiLAoJCQkic2l6ZSI6IDE2OAoJCX0KCV0KfQ==&#34;
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 201 Created
+RECEIVED AT  : 2020-10-10T23:59:54.902412983Z
+TIME DURATION: 317.176µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Content-Digest: sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556
+	Location: /v2/&amp;{map[sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d}) sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556})] map[tagtest0:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) test0:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) test1:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) test2:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) test3:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556})] /hacking/data/manifests/fedora /hacking/data/manifests/fedora/index/ /hacking/data/manifests/fedora/tags/ fedora}/manifests/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-29-button" class="toggle" onclick="javascript:toggleOutput('output-box-29')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-29')">Registry should accept a manifest upload with no layers</h4>
+                        <br>
+                        <div id="output-box-29" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.904917 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+PUT  /v2/fedora/manifests/emptylayer  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Accept: application/vnd.oci.image.manifest.v1&#43;json
+	Content-Type: application/vnd.oci.image.manifest.v1&#43;json
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+&#34;ewoJInNjaGVtYVZlcnNpb24iOiAyLAoJImNvbmZpZyI6IHsKCQkibWVkaWFUeXBlIjogImFwcGxpY2F0aW9uL3ZuZC5vY2kuaW1hZ2UuY29uZmlnLnYxK2pzb24iLAoJCSJkaWdlc3QiOiAic2hhMjU2OjY2YWQ5ODE2NWQzOGY1M2VlNzM4NjhmODJiZDRlZWQ2MDU1NmRkZmVlODI0ODEwYTQwNjJjNGY3NzdiMjBhNWIiLAoJCSJzaXplIjogMTEzCgl9LAoJImxheWVycyI6IFtdCn0=&#34;
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 201 Created
+RECEIVED AT  : 2020-10-10T23:59:54.90393885Z
+TIME DURATION: 323.979µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Content-Digest: sha256:f161636f6cd324a1ff25b4e96d48535d1b1b7a612a3d42aefd1c81190e8568c0
+	Location: /v2/&amp;{map[sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d sha256:492f3f38d6b5d3ca859514e250e25ba65935bcdd9f4f40c124b773fe536fee7d}) sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) sha256:f161636f6cd324a1ff25b4e96d48535d1b1b7a612a3d42aefd1c81190e8568c0:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:f161636f6cd324a1ff25b4e96d48535d1b1b7a612a3d42aefd1c81190e8568c0 sha256:f161636f6cd324a1ff25b4e96d48535d1b1b7a612a3d42aefd1c81190e8568c0})] map[emptylayer:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:f161636f6cd324a1ff25b4e96d48535d1b1b7a612a3d42aefd1c81190e8568c0 sha256:f161636f6cd324a1ff25b4e96d48535d1b1b7a612a3d42aefd1c81190e8568c0}) tagtest0:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) test0:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) test1:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) test2:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556}) test3:%!s(*registry.Manifest=&amp;{fedora /hacking/data/manifests/fedora/index/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556 sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556})] /hacking/data/manifests/fedora /hacking/data/manifests/fedora/index/ /hacking/data/manifests/fedora/tags/ fedora}/manifests/sha256:f161636f6cd324a1ff25b4e96d48535d1b1b7a612a3d42aefd1c81190e8568c0
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-30-button" class="toggle" onclick="javascript:toggleOutput('output-box-30')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-30')">GET request to manifest URL (digest) should yield 200 response</h4>
+                        <br>
+                        <div id="output-box-30" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.905535 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+GET  /v2/fedora/manifests/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	Accept: application/vnd.oci.image.manifest.v1&#43;json
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 200 OK
+RECEIVED AT  : 2020-10-10T23:59:54.905201413Z
+TIME DURATION: 217.328µs
+HEADERS      :
+	Content-Type: application/vnd.docker.distribution.manifest.v2&#43;json
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+	Docker-Content-Digest: sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556
+BODY         :
+*** Error: Unable to format response body - &#34;unexpected end of JSON input&#34; ***
+
+Log Body as-is:
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+                <h3>Teardown</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-31-button" class="toggle" onclick="javascript:toggleOutput('output-box-31')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-31')">Delete config blob created in tests</h4>
+                        <br>
+                        <div id="output-box-31" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.906087 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+DELETE  /v2/fedora/blobs/sha256:66ad98165d38f53ee73868f82bd4eed60556ddfee824810a4062c4f777b20a5b  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.905856464Z
+TIME DURATION: 259.678µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-32-button" class="toggle" onclick="javascript:toggleOutput('output-box-32')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-32')">Delete layer blob created in setup</h4>
+                        <br>
+                        <div id="output-box-32" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.906639 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+DELETE  /v2/fedora/blobs/sha256:48acff1d91752e957527c1b5416e7376d910bcacf01b9441175f8c270e35c183  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.906369799Z
+TIME DURATION: 227.067µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result green">
+                        <div id="output-box-33-button" class="toggle" onclick="javascript:toggleOutput('output-box-33')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-33')">Delete manifest created in tests</h4>
+                        <br>
+                        <div id="output-box-33" style="display: none;">
+                          <pre class="pre-box">2020/10/10 23:59:54.907206 DEBUG 
+==============================================================================
+~~~ REQUEST ~~~
+DELETE  /v2/fedora/manifests/sha256:72602cdfe6c886d367e513b2c48c93e83dfe3993f2b87f481056a5117e3f7556  HTTP/1.1
+HOST   : 127.0.0.1:5000
+HEADERS:
+	User-Agent: distribution-spec-conformance-tests
+BODY   :
+***** NO CONTENT *****
+------------------------------------------------------------------------------
+~~~ RESPONSE ~~~
+STATUS       : 202 Accepted
+RECEIVED AT  : 2020-10-10T23:59:54.906968865Z
+TIME DURATION: 269.847µs
+HEADERS      :
+	Content-Length: 0
+	Date: Sat, 10 Oct 2020 23:59:54 GMT
+BODY         :
+
+==============================================================================
+
+</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+            
+          
+        </div>
+        
+          
+          
+            
+              <h2>Content Discovery</h2>
+              <div class="subcategory">
+              
+              
+                <h3>Setup</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-34-button" class="toggle" onclick="javascript:toggleOutput('output-box-34')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-34')">Populate registry with test blob</h4>
+                        <br>
+                        <div id="output-box-34" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-35-button" class="toggle" onclick="javascript:toggleOutput('output-box-35')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-35')">Populate registry with test layer</h4>
+                        <br>
+                        <div id="output-box-35" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-36-button" class="toggle" onclick="javascript:toggleOutput('output-box-36')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-36')">Populate registry with test tags</h4>
+                        <br>
+                        <div id="output-box-36" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+	OCI_TEST_PULL=1
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-37-button" class="toggle" onclick="javascript:toggleOutput('output-box-37')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-37')">Populate registry with test tags (no push)</h4>
+                        <br>
+                        <div id="output-box-37" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+	OCI_TEST_PULL=1
+</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+                <h3>Test content discovery endpoints</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-38-button" class="toggle" onclick="javascript:toggleOutput('output-box-38')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-38')">GET request to list tags should yield 200 response</h4>
+                        <br>
+                        <div id="output-box-38" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+	OCI_TEST_PULL=1
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-39-button" class="toggle" onclick="javascript:toggleOutput('output-box-39')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-39')">GET number of tags should be limitable by `n` query parameter</h4>
+                        <br>
+                        <div id="output-box-39" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-40-button" class="toggle" onclick="javascript:toggleOutput('output-box-40')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-40')">GET start of tag is set by `last` query parameter</h4>
+                        <br>
+                        <div id="output-box-40" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+                <h3>Teardown</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-41-button" class="toggle" onclick="javascript:toggleOutput('output-box-41')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-41')">Delete config blob created in tests</h4>
+                        <br>
+                        <div id="output-box-41" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-42-button" class="toggle" onclick="javascript:toggleOutput('output-box-42')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-42')">Delete layer blob created in setup</h4>
+                        <br>
+                        <div id="output-box-42" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-43-button" class="toggle" onclick="javascript:toggleOutput('output-box-43')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-43')">Delete created manifest &amp; associated tags</h4>
+                        <br>
+                        <div id="output-box-43" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_CONTENT_MANAGEMENT=
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+            
+          
+        </div>
+        
+          
+          
+            
+              <h2>Content Management</h2>
+              <div class="subcategory">
+              
+              
+                <h3>Setup</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-44-button" class="toggle" onclick="javascript:toggleOutput('output-box-44')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-44')">Populate registry with test config blob</h4>
+                        <br>
+                        <div id="output-box-44" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-45-button" class="toggle" onclick="javascript:toggleOutput('output-box-45')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-45')">Populate registry with test layer</h4>
+                        <br>
+                        <div id="output-box-45" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-46-button" class="toggle" onclick="javascript:toggleOutput('output-box-46')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-46')">Populate registry with test tag</h4>
+                        <br>
+                        <div id="output-box-46" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_CONTENT_MANAGEMENT=
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-47-button" class="toggle" onclick="javascript:toggleOutput('output-box-47')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-47')">Check how many tags there are before anything gets deleted</h4>
+                        <br>
+                        <div id="output-box-47" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+                <h3>Manifest delete</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-48-button" class="toggle" onclick="javascript:toggleOutput('output-box-48')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-48')">DELETE request to manifest tag should return 202, unless tag deletion is disallowed (400/405)</h4>
+                        <br>
+                        <div id="output-box-48" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-49-button" class="toggle" onclick="javascript:toggleOutput('output-box-49')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-49')">DELETE request to manifest (digest) should yield 202 response unless already deleted</h4>
+                        <br>
+                        <div id="output-box-49" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-50-button" class="toggle" onclick="javascript:toggleOutput('output-box-50')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-50')">GET request to deleted manifest URL should yield 404 response, unless delete is disallowed</h4>
+                        <br>
+                        <div id="output-box-50" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-51-button" class="toggle" onclick="javascript:toggleOutput('output-box-51')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-51')">GET request to tags list should reflect manifest deletion</h4>
+                        <br>
+                        <div id="output-box-51" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+	OCI_TEST_PULL=1
+</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+                <h3>Blob delete</h3>
+                
+                
+                  
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-52-button" class="toggle" onclick="javascript:toggleOutput('output-box-52')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-52')">DELETE request to blob URL should yield 202 response</h4>
+                        <br>
+                        <div id="output-box-52" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_CONTENT_MANAGEMENT=
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+</pre>
+                        </div>
+                      </div>
+                    
+                  
+                    
+                    
+                      <div class="result grey">
+                        <div id="output-box-53-button" class="toggle" onclick="javascript:toggleOutput('output-box-53')">+</div>
+                        <h4 style="display: inline;" onclick="javascript:toggleOutput('output-box-53')">GET request to deleted blob URL should yield 404 response</h4>
+                        <br>
+                        <div id="output-box-53" style="display: none;">
+                          <pre class="pre-box">you have skipped this test; if this is an error, check your environment variable settings:
+	OCI_TEST_PULL=1
+	OCI_TEST_PUSH=1
+	OCI_TEST_CONTENT_DISCOVERY=
+	OCI_TEST_CONTENT_MANAGEMENT=
+</pre>
+                        </div>
+                      </div>
+                    
+                  <br>
+                
+              
+            
+          
+        </div>
+        
+      
+    </div>
+  </body>
+</html>
