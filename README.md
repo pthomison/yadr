@@ -5,8 +5,9 @@ YADR is an attempt to build an OCI compliant docker registry with as little comp
 No authentication, no encryption, no problem? This is a learning project that should not run anywhere close to a production environment
 
 #### Implemtation Status:
-| Pull               | Done, but needs better error checking                                                            |
+| Workflow           | Status                                                                                           |
 |--------------------|--------------------------------------------------------------------------------------------------|
+| Pull               | Done, but needs better error checking                                                            |
 | Push               | Done, but needs better error checking                                                            |
 | Content Discovery  | Can list tags, but does not implement the catalog endpoint                                       |
 | Content Management | Content can be deleted explicitly, but there is no garbage collection for orphaned blogs or tags |
