@@ -4,7 +4,7 @@ YADR is an attempt to build an OCI compliant docker registry with as little comp
 
 No authentication, no encryption, no problem? This is a learning project that should not run anywhere close to a production environment
 
-#### Implemtation Status:
+#### Implementation Status:
 | Workflow           | Status                                                                                           |
 |--------------------|--------------------------------------------------------------------------------------------------|
 | Pull               | Done, but needs better error checking                                                            |
@@ -14,11 +14,12 @@ No authentication, no encryption, no problem? This is a learning project that sh
 
 
 #### Go Packages Used:
-
-| Gorilla Mux | github.com/gorilla/mux                |
-| Logrus      | github.com/sirupsen/logrus            |
-| UUID        | github.com/google/uuid                |
-| Cobra       | github.com/spf13/cobra                |
+| Packages    |                            |
+|-------------|----------------------------|
+| Gorilla Mux | github.com/gorilla/mux     |
+| Logrus      | github.com/sirupsen/logrus |
+| UUID        | github.com/google/uuid     |
+| Cobra       | github.com/spf13/cobra     |
 
 #### Standards/Documentation Used:
 OCI Spec: https://github.com/opencontainers/distribution-spec/blob/master/spec.md
